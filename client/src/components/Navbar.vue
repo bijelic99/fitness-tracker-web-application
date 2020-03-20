@@ -50,8 +50,8 @@
             <span>Logged in user</span>
           </a>
           <div class="navbar-dropdown">
-            <a href="/User" class="navbar-item">My profile</a>
-            <a href="/" class="navbar-item">Sign out</a>
+            <router-link to="/User" class="navbar-item">My profile</router-link>
+            <router-link to="/" class="navbar-item">Sign out</router-link>
           </div>
         </div>
       </div>
