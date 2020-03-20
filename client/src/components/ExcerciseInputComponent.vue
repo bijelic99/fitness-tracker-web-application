@@ -1,15 +1,15 @@
 <template>
   <div class="container">
     <div class="field">
-      <label for class="label">Food name:</label>
+      <label for class="label">Excercise:</label>
       <div class="control">
-        <input type="text" name id class="input" />
+        <input type="text" class="input" />
       </div>
     </div>
     <div class="field">
-      <label for class="label">Nutritional value:</label>
+      <label for class="label">Calories burnt:</label>
       <div class="control">
-        <input type="text" name id class="input" />
+        <input type="text" class="input" />
       </div>
     </div>
     <div class="field is-grouped is-grouped-centered">

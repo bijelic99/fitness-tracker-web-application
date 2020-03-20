@@ -2,11 +2,12 @@
   <div class="panel is-success">
     <div class="panel-heading">Excercise/Food input</div>
     <div class="panel-tabs">
-      <a class="is-active" href="/">Excercise</a>
-      <a href="/">Food</a>
+      <a :class="panelShown ? `is-active` : ``" @click="panelShown = true">Excercise</a>
+      <a :class="panelShown ? `` : `is-active`" @click="panelShown = false">Food</a>
     </div>
     <div class="panel-block">
-      <ExcerciseInputComponent/>
+      <ExcerciseInputComponent v-if="panelShown"/>
+      <FoodInputComponent v-if="!panelShown"/>
     </div>
     
   </div>
@@ -14,10 +15,17 @@
 
 <script>
 import ExcerciseInputComponent from './ExcerciseInputComponent'
+import FoodInputComponent from './FoodInputComponent'
 export default {
   name: "FoodAndExerciseInput",
   components:{
-    ExcerciseInputComponent
+    ExcerciseInputComponent,
+    FoodInputComponent,
+  },
+  data(){
+    return{
+      panelShown: true
+    }
   }
 };
 </script>
