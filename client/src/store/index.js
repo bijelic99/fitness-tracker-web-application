@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import currentUserModule from './modules/currentUserModule'
 import postsModule from './modules/postsModule'
 import usersModule from './modules/usersModule'
+import inputsModule from './modules/inputsModule'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    currentUserModule, postsModule, usersModule
+    currentUserModule, postsModule, usersModule, inputsModule
   }
 })

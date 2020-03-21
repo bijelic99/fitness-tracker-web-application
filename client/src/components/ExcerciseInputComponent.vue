@@ -12,17 +12,15 @@
         <input type="text" class="input" />
       </div>
     </div>
-    <div class="field">
-      <label class="label">Visibility:</label>
-      <div class="select is-fullwidth">
-        <select>
-          <option v-for="post in getPostVisibility" :key="post">{{post}}</option>
-        </select>
-      </div>
+    <div class="field is-grouped is-grouped-right">
+      <label class="checkbox">
+        <input type="checkbox" />
+          Share this accomplishment
+      </label>
     </div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
-        <button class="button is-link">Add to your daily intake</button>
+        <button class="button is-link">Add to your daily excercise</button>
       </div>
     </div>
   </div>
