@@ -42,10 +42,10 @@
             </div>
           </div>
           <div class="panel-block">
-            <div class="field">
+            <div class="field w-100">
               <label class="label">Visibility:</label>
-              <div class="select">
-                <select v-model="post.visibility">
+              <div class="select w-100">
+                <select class="w-100" v-model="post.visibility">
                   <option v-for="visibility in getPostVisibility" :key="visibility">{{visibility}}</option>
                 </select>
               </div>
@@ -95,10 +95,11 @@ export default {
     return {
       post: {
         input: null,
-        user: { _id: "sdajiasjdasd" },
-        title: "Just ate a double hamburger",
-        text: "And gained 2000 calories in the process",
-        visibility: "Private"
+        user: null,
+        title: "",
+        text: "",
+        visibility: "Private",
+        likes: []
       },
       infoModalData: {
         visible: false,
@@ -144,9 +145,8 @@ export default {
 </script>
 
 <style>
-.field,
-.select,
-select {
-  width: 100%;
+
+.w-100{
+    width: 100%;
 }
 </style>

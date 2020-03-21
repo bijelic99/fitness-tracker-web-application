@@ -66,7 +66,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getPostVisibility", "getCurrentUser"])
+    ...mapGetters(["getPostVisibility"])
   },
   methods: {
     ...mapActions(["addInput"]),

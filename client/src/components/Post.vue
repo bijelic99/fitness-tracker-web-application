@@ -9,8 +9,8 @@
           </div>
           <div class="media-content">
             <div class="content">
-              <p>
-                <strong class="pr-4px">{{`${post.user.firstName} ${post.user.lastName}`}}</strong>
+              <p v-if="post.user">
+                <strong class="pr-4px">{{`${post.user.firstName } ${post.user.lastName}`}}</strong>
                 <small class="pr-4px">@{{post.user.username}}</small>
                 <small class="pr-4px">31m</small>
                 <small class="pr-4px"><span class="icon is-small"><i :class="getInputTypes[post.input.type].icon"/></span></small>
