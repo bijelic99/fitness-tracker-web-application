@@ -5,6 +5,7 @@ import store from './store'
 import './../node_modules/bulma/css/bulma.css'
 import './../node_modules/@fortawesome/fontawesome-free/css/all.css'
 
+
 Vue.config.productionTip = false
 
 new Vue({

@@ -6,6 +6,7 @@
           <div class="image-container">
             <figure>
               <img
+                class="profile-image"
                 src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
                 alt="Profile picture"
               />
@@ -67,5 +68,9 @@ export default {
   grid-template-columns: 4fr 8fr;
 
   padding: 12px;
+}
+.profile-image{
+  width: 384px;
+  height: 384px;
 }
 </style>

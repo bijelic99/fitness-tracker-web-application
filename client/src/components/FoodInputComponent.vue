@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+  <div class="container">
     <div class="field">
       <label for class="label">Food name:</label>
       <div class="control">
@@ -7,9 +7,17 @@
       </div>
     </div>
     <div class="field">
-      <label for class="label">Calories:</label>
+      <label class="label">Calories:</label>
       <div class="control">
         <input type="text" class="input" />
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Visibility:</label>
+      <div class="select is-fullwidth">
+        <select>
+          <option v-for="post in getPostVisibility" :key="post">{{post}}</option>
+        </select>
       </div>
     </div>
     <div class="field is-grouped is-grouped-centered">
@@ -21,11 +29,14 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
-    name: "FoodInputComponent"
-}
+  name: "FoodInputComponent",
+  computed: {
+    ...mapGetters(['getPostVisibility']),
+  }
+};
 </script>
 
 <style>
-
 </style>

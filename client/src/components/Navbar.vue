@@ -17,7 +17,6 @@
     <div id="navbarContent" class="navbar-menu">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">Home</router-link>
-        <router-link class="navbar-item" to="/">Private Feed</router-link>
         <router-link class="navbar-item" to="/">About</router-link>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">More</a>
