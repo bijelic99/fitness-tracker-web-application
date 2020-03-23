@@ -13,6 +13,7 @@ app.use(bodyParser.json())
 app.use('/api', require('./controller/api/posts'))
 app.use('/api', require('./controller/api/users'))
 app.use('/api', require('./controller/api/inputs'))
+app.use('/', require('./controller/register'))
 
 app.listen(process.env.port || 5000,() => {
     console.log('Server is up')

@@ -33,13 +33,7 @@ const userSchema = new Schema({
     registered: {
         type: Date,
         default: Date.now
-    },
-    //references to our posts
-    posts: [Schema.ObjectId],
-    //references to our inputs
-    inputs: [Schema.ObjectId],
-    //references to our likes    
-    likes: [Schema.ObjectId],
+    }
 
 
 
