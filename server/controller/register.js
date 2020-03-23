@@ -1,10 +1,15 @@
-//module for registering new users
+//controller for registering new users
+
+//imports
 const express = require('express')
+const bcrypt = require('bcryptjs')
+
 const router = express.Router()
-const route = '/register'
+
 const User = require('../model/user')
-const Joi = require('@hapi/joi')
 const UserValidationSchema = require('../validation/userModelValidation')
+
+const route = '/register'
 
 //registers a new user
 router.post(route, async (req, res) => {
@@ -18,7 +23,7 @@ router.post(route, async (req, res) => {
     else {
 
         //checks to see if email or username are taken
-        var query = User.findOne({
+        const query = User.findOne({
             $or: [{
                 email: req.body.email
             },
@@ -33,12 +38,16 @@ router.post(route, async (req, res) => {
         }
 
         //if there are no errors we add new user to the database
+
+        const salt = await bcrypt.genSalt(10)
+        
+
         const user = new User({
             username: req.body.username,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            password: req.body.password,
+            password: await bcrypt.hash(req.body.password, salt),
             picture: req.body.picture
         })
         user.save().then(() => {
