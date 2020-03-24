@@ -38,7 +38,17 @@ const getters = {
 }
 
 const actions = {
-    addInput: ({ commit }, input)=>{
+    addFoodInput: ({ commit }, input)=>{
+        //for adding a new input
+        commit('ADD_INPUT', input)
+        return true
+    },
+    addExcerciseInput: ({ commit }, input)=>{
+        //for adding a new input
+        commit('ADD_INPUT', input)
+        return true
+    },
+    addBmiInput: ({ commit }, input)=>{
         //for adding a new input
         commit('ADD_INPUT', input)
         return true
