@@ -7,6 +7,30 @@
       </div>
     </div>
     <div class="field">
+      <label for class="label">Type of food:</label>
+    </div>
+    <div class="field">
+      <div class="control is-expanded">
+        <div class="select w-100">
+          <select class="w-100">
+            <option>Not vegan</option>
+            <option>Vegan</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">How much food:</label>
+    </div>
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input type="text" class="input" v-model="input.value" />
+      </div>
+      <p class="control">
+        <a class="button is-static">grams</a>
+      </p>
+    </div>
+    <div class="field">
       <label class="label">Calories:</label>
       <div class="control">
         <input type="text" class="input" v-model="input.value" />
@@ -74,18 +98,18 @@ export default {
       //If share checkbox is checked open share modal else open modal with either success or fail depending on the addInput() outcome
       var res = this.addInput(this.input);
       if (res) {
-          this.infoModalData.modalColor = "is-success";
-          this.infoModalData.title = "Success";
-          this.infoModalData.text = "Successfuly added";
-        } else {
-          this.infoModalData.modalColor = "is-warning";
-          this.infoModalData.title = "Error";
-          this.infoModalData.text = "An error happened";
-        }
+        this.infoModalData.modalColor = "is-success";
+        this.infoModalData.title = "Success";
+        this.infoModalData.text = "Successfuly added";
+      } else {
+        this.infoModalData.modalColor = "is-warning";
+        this.infoModalData.title = "Error";
+        this.infoModalData.text = "An error happened";
+      }
       if (this.share) {
-        if(!res) this.infoModalData.visible = true;
+        if (!res) this.infoModalData.visible = true;
         else this.shareModalVisible = true;
-        }
+      }
       if (!this.share) {
         this.infoModalData.visible = true;
       }
@@ -95,4 +119,7 @@ export default {
 </script>
 
 <style>
+.w-100 {
+  width: 100%;
+}
 </style>

@@ -6,6 +6,34 @@
         <input type="text" class="input"  v-model="input.name"/>
       </div>
     </div>
+    <div class="field w-100">
+      <label for class="label">Type of excercise:</label>
+      <div class="control">
+        <div class="select w-100">
+          <select class="w-100">
+            <option>Pushups</option>
+            <option>Situps</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label for class="label">For how long:</label>
+    </div>
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input type="text" class="input" v-model="input.value" placeholder="For how long"/>
+      </div>
+      <div class="control">
+        <span class="select">
+          <select>
+            <option>Hours</option>
+            <option>Minutes</option>
+            <option>Seconds</option>
+          </select>
+        </span>
+      </div>
+    </div>
     <div class="field">
       <label for class="label">Calories burnt:</label>
       <div class="control">
@@ -95,4 +123,7 @@ export default {
 </script>
 
 <style>
+.w-100{
+  width: 100%;
+}
 </style>

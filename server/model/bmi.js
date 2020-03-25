@@ -13,6 +13,10 @@ const bmiSchema = new Schema({
         type: String,
         required: true
     },
+    name:{
+        type: String,
+        required: [true, "Name is requiered"]
+    },
     value:{
         type: Number,
         required: [true, "Value is requiered"]
