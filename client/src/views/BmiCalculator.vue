@@ -11,6 +11,16 @@
               <div class="level-item">
                 <span v-if="input.value">Your BMI is: {{input.value.toFixed(2)}}</span>
               </div>
+              <div class="level-item">
+                <div class="field" v-if="input.value">
+                  <div class="control">
+                    <button
+                      class="button is-link is-primary"
+                      @click="shareModalData.visible = true"
+                    >Share</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -25,27 +35,33 @@
           </div>
         </div>
         <div class="panel-block">
-          <div class="field w-100">
-            <label class="label">Your height:</label>
-            <div class="control">
-              <input type="text" class="input" v-model.number="input.height" />
+          <div class="field w-100 has-addons is-fullwidth">
+            <div class="control is-expanded">
+              <input
+                type="text"
+                class="input"
+                v-model.number="input.height"
+                placeholder="Your height"
+              />
             </div>
+            <p class="control">
+              <a class="button is-static">cm</a>
+            </p>
           </div>
         </div>
         <div class="panel-block">
-          <div class="field w-100">
-            <label class="label">Your weight:</label>
-            <div class="control">
-              <input type="text" class="input" v-model.number="input.mass" />
+          <div class="field w-100 has-addons is-fullwidth">
+            <div class="control is-expanded">
+              <input
+                type="text"
+                class="input"
+                v-model.number="input.mass"
+                placeholder="Your weight"
+              />
             </div>
-          </div>
-        </div>
-        <div class="panel-block">
-          <div class="field w-100">
-            <label class="checkbox">
-              <input type="checkbox" v-model="share"/>
-              Share this
-            </label>
+            <p class="control">
+              <a class="button is-static">kg</a>
+            </p>
           </div>
         </div>
         <div class="panel-block">
@@ -61,32 +77,36 @@
         </div>
       </div>
     </div>
-    <ShareModal :isVisible="shareModalData.visible" :inputProp="input" @modalClosed="closeShareModal()"/>
-    <InfoModal :isVisible="infoModalData.visible" :modalColor="infoModalData.modalColor" :title="infoModalData.title" :text="infoModalData.text"/>
+    <ShareModal
+      :isVisible="shareModalData.visible"
+      :inputProp="input"
+      @modalClosed="closeShareModal()"
+    />
+    <div :class="`notification success-notification ${notificationData.notificationVisible ? '' : 'is-hidden'} ${notificationData.notificationIsSuccess ? 'is-success' : 'is-warning'} `">
+      <button class="delete" @click="notificationData.notificationVisible = false"/>
+      <span v-if="notificationData.notificationIsSuccess">Successfuly added your BMI to the archive</span>
+      <span v-else>There was an error while adding to archive</span>
+    </div>
   </div>
 </template>
 
 <script>
 import { GChart } from "vue-google-charts";
 import { mapActions } from "vuex";
-import ShareModal from '../components/ShareModal'
-import InfoModal from '../components/InfoModal'
+import ShareModal from "../components/ShareModal";
 export default {
   name: "BmiCalculator",
   components: {
     GChart,
-    ShareModal,
-    InfoModal
+    ShareModal
   },
   data() {
     return {
-      infoModalData:{
-        visible: false,
-        modalColor: 'success',
-        title: '',
-        text: ''
+      notificationData: {
+        notificationVisible: false,
+        notificationIsSuccess: false
       },
-      shareModalData:{
+      shareModalData: {
         visible: false
       },
       input: {
@@ -97,7 +117,8 @@ export default {
       },
       share: false,
       defaultChartData: [
-        ["Height", "Obese", "Over Weight", "Normal Weight", "Under Weight"],
+        ["Height", "Obese", "Overweight", "Normal weight", "Underweight"],
+        [150, 65, 55, 42, 0],
         [160, 90, 78, 62, 48],
         [170, 102, 88, 72, 54],
         [180, 112, 98, 82, 60],
@@ -169,19 +190,23 @@ export default {
 
       this.chartData = [firstRow, ...restOfArr, newArray];
     },
-    submitButtonClicked() {
+    async submitButtonClicked() {
       //adds users bmi to server and graphs, shares it if he wants
       this.addUsersBmiToChart(this.input.height, this.input.mass);
       this.input.value = this.calculateBmi(this.input.height, this.input.mass);
-      this.addBmiInput(this.input);
-      if(this.share) {
-        this.shareModalData.visible = true
+      if(await this.addBmiInput(this.input)) {
+        this.notificationData.notificationIsSuccess = true
+        this.notificationData.notificationVisible = true
+        }
+      else{
+        this.notificationData.notificationIsSuccess = false
+        this.notificationData.notificationVisible = true
       }
     },
     //Function for bmi calculation
     calculateBmi: (height, mass) => mass / ((height / 100) * (height / 100)),
-    closeShareModal(){
-      this.shareModalData.visible = false
+    closeShareModal() {
+      this.shareModalData.visible = false;
     }
   }
 };
@@ -194,5 +219,10 @@ export default {
 .chart-container {
   overflow-y: hidden;
   overflow-x: auto;
+}
+.success-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 </style>

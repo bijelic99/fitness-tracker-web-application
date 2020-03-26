@@ -1,10 +1,15 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
+
 const Schema = mongoose.Schema
 
 //schema for post object
 const inputSchema = new Schema({
     //user who uploaded it
-    user_id: Schema.ObjectId,
+    user_id: {
+        type: Schema.ObjectId,
+        ref: "User"
+    },
     title:{
         type: String,
         required: true
@@ -17,7 +22,8 @@ const inputSchema = new Schema({
     input: {
         type: Schema.ObjectId,
         required: false,
-        default: null
+        default: null,
+        ref: 'Input'
     },
     //time of upload
     postedAt:{
@@ -32,6 +38,8 @@ const inputSchema = new Schema({
     //reference to users who liked it
     likes: [Schema.ObjectId]
 })
+
+inputSchema.plugin(mongoosePaginate)
 
 const Post = mongoose.model("Post", inputSchema)
 

@@ -9,10 +9,12 @@ const userSchema = new Schema({
         unique: true
     },
     firstName: {
-        type: String
+        type: String,
+        default: null
     },
     lastName: {
-        type: String
+        type: String,
+        default: null
     },
     email: {
         type: String,
@@ -27,9 +29,7 @@ const userSchema = new Schema({
         type: String,
     },
     //references to our friends
-    friends: {
-        type: [Schema.ObjectId]
-    },
+    friends: [{ type: Schema.ObjectId, ref: 'User' }],
     registered: {
         type: Date,
         default: Date.now

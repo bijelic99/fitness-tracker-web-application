@@ -14,7 +14,7 @@
                   </span>
                 </small>
                 <small class="pr-4px">{{inputProp.name}}</small>
-                <small class="pr-4px">{{inputProp.value.toFixed(2)}}</small>
+                <small class="pr-4px">{{ inputProp.value ? inputProp.value.toFixed(2) : ''}}</small>
                 <small class="pr-4px">{{getInputTypes[inputProp.type].sufix}}</small>
               </div>
               <div class="level-right"></div>

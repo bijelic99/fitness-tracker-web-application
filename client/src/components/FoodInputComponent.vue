@@ -93,10 +93,10 @@ export default {
     ...mapGetters(["getPostVisibility"])
   },
   methods: {
-    ...mapActions(["addInput"]),
+    ...mapActions(["addFoodInput"]),
     addButtonClick() {
       //If share checkbox is checked open share modal else open modal with either success or fail depending on the addInput() outcome
-      var res = this.addInput(this.input);
+      var res = this.addFoodInput(this.input);
       if (res) {
         this.infoModalData.modalColor = "is-success";
         this.infoModalData.title = "Success";

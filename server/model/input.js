@@ -6,19 +6,28 @@ const inputSchema = new Schema({
     //user who uploaded it
     user_id: {
         type: Schema.ObjectId,
-        default: null
+        default: null,
+        ref: 'User'
     },
+    //is it a food or excercise or bmi
     type: {
         type: String,
-        required: true
+        required: true,
+        enum: ['BmiInput', 'ExcerciseInput', 'FoodInput']
     },
     name:{
         type: String,
-        required: [true, "Name is requiered"]
+        required: false,
+        default: null
     },
     value:{
         type: Number,
         required: [true, "Value is requiered"]
+    },
+    input_data_id:{
+        type: Schema.ObjectId,
+        required: true,
+        refPath: 'type'
     }
 })
 
