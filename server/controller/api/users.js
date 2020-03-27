@@ -3,6 +3,8 @@ const router = express.Router()
 const route = '/users'
 const User = require('../../model/user')
 const { gridfs } = require('../../middleware/profilePictureUploadMiddleware')
+const moongose = require('mongoose')
+const fs = require('fs')
 
 // @desc Retrieves all users
 // @route GET /users
@@ -29,10 +31,10 @@ router.delete(`${route}/:id`, (req, res)=>{
 
 // @desc Retrieves profile picture
 // @route GET /users/profilePicture/:pictureId
-router.get(`${route}/profilePicture/:filename`, (req, res)=>{
+router.get(`${route}/profilePicture/:picture_id`, (req, res)=>{
     gridfs.then(gfs=>{
         gfs.files.findOne({
-            filename: req.params.filename
+            _id: new moongose.mongo.ObjectId( req.params.picture_id )
         }, (err, file)=>{
             if(!file || file.length === 0){
                 return res.status(404).json({

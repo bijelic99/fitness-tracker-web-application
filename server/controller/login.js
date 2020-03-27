@@ -38,6 +38,8 @@ router.post(route, async (req, res) => {
     //adds the token to the header
     res.header('auth-token', token)
 
+    
+
     //sends the token back as well as user data
     return res.send({ user: user, token: token })
 

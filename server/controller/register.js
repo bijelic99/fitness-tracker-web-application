@@ -32,7 +32,7 @@ router.post(route, profilePictureUpload.single('profile-picture'), async (req, r
                 username: req.body.username
             }]
         }).exec()
-        
+
         if (await query) {
             res.status(400).send({ error: 'Email or username are taken' })
             return
@@ -41,7 +41,7 @@ router.post(route, profilePictureUpload.single('profile-picture'), async (req, r
         //if there are no errors we add new user to the database
 
         const salt = await bcrypt.genSalt(10)
-        
+
         const user = new User({
             username: req.body.username,
             firstName: req.body.firstName,
@@ -49,8 +49,8 @@ router.post(route, profilePictureUpload.single('profile-picture'), async (req, r
             email: req.body.email,
             password: await bcrypt.hash(req.body.password, salt)
         })
-        if(req.file) user.picture_id = req.file.id
-        
+        if (req.file) user.picture_id = req.file.id
+
         user.save().then(() => {
             res.send({ successful: true })
         }).catch(err => {
@@ -61,5 +61,26 @@ router.post(route, profilePictureUpload.single('profile-picture'), async (req, r
 
 })
 
+//@route POST /register/is-username-taken
+//@desc Checks to see if username is taken
+router.post(`${route}/is-username-taken`, (req, res) => {
+    User.findOne({
+        username: req.body.username
+    }).lean().exec().then(data => {
+        if (data) return res.json({ isTaken: true })
+        else return res.json({ isTaken: false })
+    }).catch(err => res.status(400).json({ error: err.message }))
+})
+
+//@route POST /register/is-email-taken
+//@desc Checks to see if email is taken
+router.post(`${route}/is-email-taken`, (req, res) => {
+    User.findOne({
+        email: req.body.email
+    }).lean().exec().then(data => {
+        if (data) return res.json({ isTaken: true })
+        else return res.json({ isTaken: false })
+    }).catch(err => res.status(400).json({ error: err.message }))
+})
 
 module.exports = router
