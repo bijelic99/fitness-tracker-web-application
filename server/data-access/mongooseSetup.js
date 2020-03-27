@@ -1,0 +1,22 @@
+const mongoose = require('mongoose')
+
+//connecting to database
+//the url link is env variable and should be in .env file under the name of DATABASE_URL
+const connection = mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(({ connection }) => {
+        console.log("Connection established")
+        return connection
+    })
+    .catch(err => {
+        console.error(err.message)
+        return null
+    })
+
+mongoose.Promise = global.Promise
+
+
+
+module.exports = connection

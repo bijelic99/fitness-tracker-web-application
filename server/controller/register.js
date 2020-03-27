@@ -3,6 +3,7 @@
 //imports
 const express = require('express')
 const bcrypt = require('bcryptjs')
+const { profilePictureUpload } = require('../middleware/profilePictureUploadMiddleware')
 
 const router = express.Router()
 
@@ -12,7 +13,7 @@ const UserValidationSchema = require('../validation/userModelValidation')
 const route = '/register'
 
 //registers a new user
-router.post(route, async (req, res) => {
+router.post(route, profilePictureUpload.single('profile-picture'), async (req, res) => {
 
     //validating the data before adding it to the database
     const { error } = UserValidationSchema.validate(req.body)
@@ -41,15 +42,15 @@ router.post(route, async (req, res) => {
 
         const salt = await bcrypt.genSalt(10)
         
-
         const user = new User({
             username: req.body.username,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            password: await bcrypt.hash(req.body.password, salt),
-            picture: req.body.picture
+            password: await bcrypt.hash(req.body.password, salt)
         })
+        if(req.file) user.picture_id = req.file.id
+        
         user.save().then(() => {
             res.send({ successful: true })
         }).catch(err => {
@@ -59,5 +60,6 @@ router.post(route, async (req, res) => {
     }
 
 })
+
 
 module.exports = router

@@ -25,8 +25,9 @@ const userSchema = new Schema({
         type: String,
         required: [true, "Password is requiered"]
     },
-    picture: {
-        type: String,
+    picture_id: {
+        type: Schema.ObjectId,
+        default: "5e7dfa91af72c22a0492241e"
     },
     //references to our friends
     friends: [{ type: Schema.ObjectId, ref: 'User' }],
