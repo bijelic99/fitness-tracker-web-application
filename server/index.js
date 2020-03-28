@@ -8,8 +8,7 @@ const cors = require('cors')
 //app setup
 const app = express()
 
-app.options('*', cors())
-app.post('*', cors())
+app.use(cors())
 app.use(bodyParser.json())
 
 //Setting up routes
