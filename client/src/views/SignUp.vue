@@ -155,8 +155,16 @@
         </div>
       </div>
     </div>
-    <modal name="success-modal" title="Success" @closed="successModalClosed()">Registration successful</modal>
-    <modal name="fail-modal" title="Failure">Registration failed</modal>
+    <modal name="success-modal" title="Success" @closed="successModalClosed()">
+      <div class="notification is-success h-100perc">
+          Registration successful
+      </div>
+    </modal>
+    <modal name="fail-modal" title="Failure"><div class="box">
+        <div class="notification is-danger h-100perc">
+          Registration failed
+        </div>
+      </div></modal>
   </div>
 </template>
 
@@ -306,5 +314,8 @@ export default {
 .w-100,
 .field {
   width: 100%;
+}
+.h-100perc{
+  height: 100%;
 }
 </style>
