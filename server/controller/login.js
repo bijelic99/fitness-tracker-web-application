@@ -24,7 +24,9 @@ router.post(route, async (req, res) => {
         {
             email: req.body.email
         }]
-    }).exec().then(doc => doc.toObject())
+    }).exec().then(doc => doc.toObject()).catch(()=> null)
+
+    if(await user){
 
     //checks password with hashed pwd stored in db
     const validPassword = await bcrypt.compare(req.body.password, await user.password)
@@ -42,7 +44,8 @@ router.post(route, async (req, res) => {
 
     //sends the token back as well as user data
     return res.send({ user: user, token: token })
-
+    }
+    else return res.status(400).send({ error: "wrong password" })
 
 })
 

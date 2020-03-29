@@ -29,13 +29,13 @@
       </div>
 
       <div class="navbar-end">
-        <div class="navbar-item">
+        <div class="navbar-item" v-if="!isLoggedIn">
           <div class="buttons">
             <router-link to="/SignIn" class="button is-primary">Sign in</router-link>
             <router-link to="/SignUp" class="button is-primary">Sign up</router-link>
           </div>
         </div>
-        <div class="navbar-item has-dropdown is-hoverable">
+        <div class="navbar-item has-dropdown is-hoverable" v-if="isLoggedIn">
           <a class="navbar-link">
             <span class="icon">
               <i class="fas fa-user"></i>
@@ -44,7 +44,7 @@
           </a>
           <div class="navbar-dropdown">
             <router-link to="/User" class="navbar-item">My profile</router-link>
-            <router-link to="/" class="navbar-item">Sign out</router-link>
+            <a class="navbar-item" @click="signOut()">Sign out</a>
           </div>
         </div>
       </div>
@@ -53,11 +53,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: "Navbar",
   computed:{
     ...mapGetters(['getCurrentUserFullName', 'isLoggedIn']),
+  },
+  methods:{
+    ...mapActions(['signOut'])
   }
 };
 </script>

@@ -2,8 +2,8 @@
   <div class="section">
     <div class="container">
       <div class="columns">
-        <div class="column is-two-thirds"><Feed/></div>
-        <div class="column is-one-third"><FoodAndExerciseInput/></div>
+        <div :class="`column ${isLoggedIn ? 'is-two-thirds': ''}`"><Feed/></div>
+        <div v-if="isLoggedIn" class="column is-one-third"><FoodAndExerciseInput/></div>
       </div>
       
     </div>
@@ -13,10 +13,17 @@
 <script>
 import Feed from '../components/Feed'
 import FoodAndExerciseInput from '../components/FoodAndExerciseInput'
+import { mapGetters } from 'vuex';
 export default {
   name: "Home",
   components: {
     Feed, FoodAndExerciseInput
+  },
+  computed:{
+    ...mapGetters(['isLoggedIn']),
+
+  },
+  methods:{
   }
 };
 </script>
