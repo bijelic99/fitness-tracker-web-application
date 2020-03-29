@@ -12,8 +12,8 @@ const state = {
             profilePicture: ''
 
         },
-        input:{
-            type: 'Excercise',
+        input: {
+            type: 'ExcerciseInput',
             name: 'Push ups',
             value: 500
         },
@@ -33,8 +33,8 @@ const state = {
             profilePicture: ''
 
         },
-        input:{
-            type: 'Excercise',
+        input: {
+            type: 'ExcerciseInput',
             name: 'Sit ups',
             value: 800
         },
@@ -54,8 +54,8 @@ const state = {
             profilePicture: ''
 
         },
-        input:{
-            type: 'Food',
+        input: {
+            type: 'FoodInput',
             name: 'Double hamburger',
             value: 2000
         },
@@ -65,16 +65,29 @@ const state = {
         visibility: 'Public',
         likes: ['asdasdasdfas']
     }],
+
     postVisibility: [
         "Private",
         "Friends",
         "Public"
     ],
-    feedFilterOptions:[
-        "My posts",
-        "Friends posts",
-        "Public posts",
-        "All posts"
+    feedFilterOptions: [
+        {
+            name: "My posts",
+            needsToBeLoggedIn: true
+        },
+        {
+            name: "Friends posts",
+            needsToBeLoggedIn: true
+        },
+        {
+            name: "Public posts",
+            needsToBeLoggedIn: false
+        },
+        {
+            name: "All posts",
+            needsToBeLoggedIn: true
+        }
     ]
 }
 
@@ -85,24 +98,24 @@ const getters = {
 }
 
 const actions = {
-    addPost: ({commit}, post) => {
+    addPost: ({ commit }, post) => {
         //called when adding the post
         //post request to api will be added later
         commit('ADD_POST', post)
-        return true 
+        return true
     },
-    likeDislikePost: ({commit}, {_id}) => {
+    likeDislikePost: ({ commit }, { _id }) => {
         //called when post is liked or disliked
         //post request to api will be added later
-        commit('LIKE_DISLIKE_POST', _id) 
+        commit('LIKE_DISLIKE_POST', _id)
     }
 }
 
 const mutations = {
     ADD_POST: (state, post) => state.posts.push(post),
     LIKE_DISLIKE_POST: (state, _id) => {
-        var post = state.posts.find(post=> post._id === _id)
-        if(!post.likes.includes(store.getters.getCurrentUser._id))
+        var post = state.posts.find(post => post._id === _id)
+        if (!post.likes.includes(store.getters.getCurrentUser._id))
             post.likes.push(store.getters.getCurrentUser._id)
         else post.likes.pop(post.likes.findIndex(id => id === store.getters.getCurrentUser._id))
         post.likedByCurrentUser = !post.likedByCurrentUser

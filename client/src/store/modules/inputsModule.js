@@ -1,39 +1,35 @@
 const state = {
     inputs: [
-        {
-            type: 'Food',
-            name: 'Double hamburger',
-            value: 2000
-        },
-        {
-            type: 'Food',
-            name: 'Double hamburger',
-            value: 2000
-        },
-        {
-            type: 'Food',
-            name: 'Double hamburger',
-            value: 2000
-        }
+        
     ],
     inputTypes: {
-        'BMI': {
+        'BmiInput': {
             icon: 'fas fa-burn',
             sufix: 'bmi'
         },
-        'Food': {
+        'FoodInput': {
             icon: 'fas fa-hamburger',
             sufix: 'calories added'
         },
-        'Excercise': {
+        'ExcerciseInput': {
             icon: 'fas fa-dumbbell',
             sufix: 'calories burned'
         }
-    }
+    },
+    foodTypes: [
+        'Vegan',
+        'Non vegan'
+    ],
+    excerciseTypes: [
+        'Pushups',
+        'Situps'
+    ],
 }
 
 const getters = {
     getInputTypes: state => state.inputTypes,
+    getFoodTypes: state => state.foodTypes,
+    getExcerciseTypes: state => state.excerciseTypes
 
 }
 

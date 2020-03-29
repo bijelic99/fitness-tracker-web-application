@@ -6,7 +6,7 @@ const inputSchema = new Schema({
     //user who uploaded it
     user_id: {
         type: Schema.ObjectId,
-        default: null,
+        required: true,
         ref: 'User'
     },
     //is it a food or excercise or bmi
@@ -17,8 +17,7 @@ const inputSchema = new Schema({
     },
     name:{
         type: String,
-        required: false,
-        default: null
+        required: true
     },
     value:{
         type: Number,

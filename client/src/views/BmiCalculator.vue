@@ -110,7 +110,7 @@ export default {
         visible: false
       },
       input: {
-        type: "BMI",
+        type: "BmiInput",
         value: null,
         height: null,
         mass: null

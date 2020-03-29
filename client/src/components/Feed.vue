@@ -8,7 +8,7 @@
         <div class="level-right">
           <div class="select is-small">
             <select>
-              <option v-for="post in getFeedFilterOptions" :key="post">{{post}}</option>
+              <option v-for="post in feedFilterOptions" :key="post.name">{{post.name}}</option>
             </select>
           </div>
         </div>
@@ -27,7 +27,11 @@ export default {
     Post
   },
   computed: {
-    ...mapGetters(["getPosts", "getPostVisibility", "getFeedFilterOptions"])
+    ...mapGetters(["getPosts", "getPostVisibility", "getFeedFilterOptions", "isLoggedIn"]),
+    feedFilterOptions(){
+      //shows only available filter types
+      return this.getFeedFilterOptions.filter(option=>!option.needsToBeLoggedIn || (option.needsToBeLoggedIn && this.isLoggedIn))
+    }
   }
 };
 </script>

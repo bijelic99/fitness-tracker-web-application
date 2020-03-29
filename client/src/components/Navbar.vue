@@ -18,14 +18,23 @@
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">Home</router-link>
         <router-link class="navbar-item" to="/About">About</router-link>
-        <router-link class="navbar-item" to="/BmiCalculator">BMI Calculator</router-link>
+        <router-link class="navbar-item" to="/BmiCalculator" v-if="isLoggedIn">BMI Calculator</router-link>
+        <router-link class="navbar-item" to="/FindPeople">Find people</router-link>
+        <!--
         <div class="navbar-item">
-          <div class="field w-24">
-            <div class="control">
+          <div class="field has-addons is-fullwidth">
+            <div class="control has-icons-left is-expanded">
               <input class="input" type="text" placeholder="Search for people" />
+              <span class="icon is-small is-left">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+            <div class="control">
+              <a class="button is-info">Search</a>
             </div>
           </div>
         </div>
+        -->
       </div>
 
       <div class="navbar-end">
@@ -34,6 +43,9 @@
             <router-link to="/SignIn" class="button is-primary">Sign in</router-link>
             <router-link to="/SignUp" class="button is-primary">Sign up</router-link>
           </div>
+        </div>
+        <div class="navbar-item" v-if="isLoggedIn">
+          <FriendRequestsDropdown/>
         </div>
         <div class="navbar-item has-dropdown is-hoverable" v-if="isLoggedIn">
           <a class="navbar-link">
@@ -53,20 +65,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from "vuex";
+import FriendRequestsDropdown from '../components/FriendRequestsDropdown'
 export default {
   name: "Navbar",
-  computed:{
-    ...mapGetters(['getCurrentUserFullName', 'isLoggedIn']),
+  components:{
+    FriendRequestsDropdown
   },
-  methods:{
-    ...mapActions(['signOut'])
+  computed: {
+    ...mapGetters(["getCurrentUserFullName", "isLoggedIn"])
+  },
+  methods: {
+    ...mapActions(["signOut"])
   }
 };
 </script>
 
 <style>
-.w-24{
-  width: 24vw;
+.w-24 {
+  width: 50vw;
 }
 </style>
