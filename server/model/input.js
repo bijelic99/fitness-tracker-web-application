@@ -23,7 +23,7 @@ const inputSchema = new Schema({
         type: Number,
         required: [true, "Value is requiered"]
     },
-    input_data_id:{
+    input_data:{
         type: Schema.ObjectId,
         required: true,
         refPath: 'type'

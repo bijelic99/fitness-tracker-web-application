@@ -11,7 +11,7 @@
       <label for class="label">Type of excercise:</label>
       <div class="control">
         <div class="select w-100">
-          <select class="w-100">
+          <select class="w-100" v-model="input.input_data.excerciseType">
             <option v-for="type in getExcerciseTypes" :key="type" :value="type">{{type}}</option>
           </select>
         </div>
@@ -22,8 +22,13 @@
     </div>
     <div class="field has-addons">
       <div class="control is-expanded">
-        <input type="text" class="input" v-model.trim="input.length" placeholder="For how long" />
-        <p v-if="!$v.input.length.numeric" class="help is-danger">Needs to be a numeric</p>
+        <input
+          type="text"
+          class="input"
+          v-model.trim="input.input_data.length"
+          placeholder="For how long"
+        />
+        <p v-if="!$v.input.input_data.length.numeric" class="help is-danger">Needs to be a numeric</p>
       </div>
       <div class="control">
         <span class="select">
@@ -61,7 +66,7 @@
     <ShareModal
       :isVisible="shareModalVisible"
       :inputProp="input"
-      @modalClosed="shareModalVisible = false"
+      @modalClosed="shareModalClosed()"
     />
     <InfoModal
       :isVisible="infoModalData.visible"
@@ -90,11 +95,14 @@ export default {
   data() {
     return {
       input: {
+        _id: null,
         type: "ExcerciseInput",
         name: "",
         value: null,
-        excerciseType: "",
-        length: ""
+        input_data: {
+          excerciseType: "",
+          length: ""
+        }
       },
       lengthUnit: "Minutes",
       share: false,
@@ -116,27 +124,32 @@ export default {
         required,
         numeric
       },
-      length: {
-        numeric
+      input_data: {
+        length: {
+          numeric
+        }
       }
     }
   },
   methods: {
-    ...mapActions(["addExcerciseInput"]),
-    addButtonClick() {
+    ...mapActions(["addInput"]),
+    async addButtonClick() {
       //Function is triggered once Add to your daily excercise is clicked
       if (!this.$v.input.$invalid) {
-        this.input.length = `${this.input.length} ${this.lengthUnit}`;
+        this.input.input_data.length = `${this.input.input_data.length} ${this.lengthUnit}`;
         //If share checkbox is checked open share modal else open modal with either success or fail depending on the addInput() outcome
-        var res = this.addExcerciseInput(this.input);
+        var res = await this.addInput(this.input);
         if (res) {
           this.infoModalData.modalColor = "is-success";
           this.infoModalData.title = "Success";
           this.infoModalData.text = "Successfuly added";
+          this.input = res
+          
         } else {
           this.infoModalData.modalColor = "is-warning";
           this.infoModalData.title = "Error";
           this.infoModalData.text = "An error happened";
+          return
         }
         if (this.share) {
           if (!res) this.infoModalData.visible = true;
@@ -144,8 +157,20 @@ export default {
         }
         if (!this.share) {
           this.infoModalData.visible = true;
+          this.clearForm()
         }
       }
+    },
+    clearForm() {
+      this.input._id = null
+      this.input.name = "";
+      this.input.value = null;
+      this.input.input_data.excerciseType = "";
+      this.input.input_data.length = "";
+    },
+    shareModalClosed(){
+      this.shareModalVisible = false
+      this.clearForm()
     }
   }
 };

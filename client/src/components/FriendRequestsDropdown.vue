@@ -9,21 +9,31 @@
       </button>
     </div>
     <div class="dropdown-menu" id="friendRequestsDropdown" role="menu">
-        <div class="dropdown-content">
-            <div class="dropdown-item"><FriendRequest/></div>
-            <div class="dropdown-item"><FriendRequest/></div>
-            <div class="dropdown-item"><FriendRequest/></div>
+      <div class="dropdown-content">
+        <div class="dropdown-item">
+          <router-link to="/">Friend list</router-link>
         </div>
+        <div class="dropdown-divider" />
+        <div class="dropdown-item">
+          <FriendRequest />
+        </div>
+        <div class="dropdown-item">
+          <FriendRequest />
+        </div>
+        <div class="dropdown-item">
+          <FriendRequest />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import FriendRequest from './FriendRequest'
+import FriendRequest from "./FriendRequest";
 export default {
   name: "FriendRequestsDropdown",
-  components:{
-      FriendRequest
+  components: {
+    FriendRequest
   }
 };
 </script>

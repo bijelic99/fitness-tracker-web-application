@@ -1,4 +1,4 @@
-import store from '../index'
+import axios from '../../axiosConfig'
 
 const state = {
     //Some static data to fill the posts 
@@ -98,28 +98,32 @@ const getters = {
 }
 
 const actions = {
-    addPost: ({ commit }, post) => {
+    addPost: ({ commit, getters }, post) => {
         //called when adding the post
-        //post request to api will be added later
-        commit('ADD_POST', post)
-        return true
+        if (getters.isLoggedIn) {
+            post.user = getters.getCurrentUserId
+            return axios.post('/api/posts', post).then(({ data }) => {
+                commit('ADD_POST', data)
+                return true
+            }).catch(() => false)
+        }
+        else return false
+
     },
     likeDislikePost: ({ commit }, { _id }) => {
         //called when post is liked or disliked
         //post request to api will be added later
-        commit('LIKE_DISLIKE_POST', _id)
+        console.log('WIP')
+        console.log(commit, _id)
     }
 }
 
 const mutations = {
     ADD_POST: (state, post) => state.posts.push(post),
+    /*
     LIKE_DISLIKE_POST: (state, _id) => {
-        var post = state.posts.find(post => post._id === _id)
-        if (!post.likes.includes(store.getters.getCurrentUser._id))
-            post.likes.push(store.getters.getCurrentUser._id)
-        else post.likes.pop(post.likes.findIndex(id => id === store.getters.getCurrentUser._id))
-        post.likedByCurrentUser = !post.likedByCurrentUser
-    },
+        console.log('WIP')
+    }*/
 }
 
 export default {

@@ -45,6 +45,7 @@ const actions = {
         var user = sessionStorage.getItem('user')
         var token = sessionStorage.getItem('auth-token')
         if(user !== null && token !== null) commit('SIGN_IN_USER', {user: JSON.parse(user), token: token})
+        axios.defaults.headers['auth-token'] = token
         
     }
 }

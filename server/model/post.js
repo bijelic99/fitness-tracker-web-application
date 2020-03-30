@@ -6,7 +6,8 @@ const Schema = mongoose.Schema
 //schema for post object
 const inputSchema = new Schema({
     //user who uploaded it
-    user_id: {
+    user: {
+        required: true,
         type: Schema.ObjectId,
         ref: "User"
     },
@@ -15,7 +16,7 @@ const inputSchema = new Schema({
         required: true
     },
     text:{
-        type: String
+        type: String,
         required: false,
         default: ''
     },
@@ -33,6 +34,7 @@ const inputSchema = new Schema({
     visibility: {
         type: String,
         required: false,
+        enum: ['Private', 'Public', 'Friends'],
         default: 'Private'
     },
     //reference to users who liked it

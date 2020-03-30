@@ -35,7 +35,7 @@ router.post(route, async (req, res) => {
     if (!validPassword) return res.status(400).send({ error: errorMessage })
 
     //creates a token for user to use in the future
-    const token = jwt.sign({ _id: user.id }, process.env.TOKEN_SECRET)
+    const token = jwt.sign({ _id: await user._id }, process.env.TOKEN_SECRET)
 
     //adds the token to the header
     res.header('auth-token', token)

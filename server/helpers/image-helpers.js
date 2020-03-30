@@ -1,5 +1,5 @@
 //for converting stream to base64 encoding
-const streamToBase64 = async function(stream){
+const streamToBase64 = function(stream){
     return stream.on('data', chunk => chunk.toString('base64'))
 }
 

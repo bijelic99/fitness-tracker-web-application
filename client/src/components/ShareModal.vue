@@ -118,6 +118,8 @@ export default {
     },
     postButtonClicked() {
       //adds the post, depending on the outcome shows the modal
+      this.post.input = this.inputProp._id
+
       var res = this.addPost(this.post);
       if (res) {
         this.infoModalData.modalColor = "is-success"

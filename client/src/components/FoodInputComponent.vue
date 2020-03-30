@@ -13,7 +13,7 @@
     <div class="field">
       <div class="control is-expanded">
         <div class="select w-100">
-          <select class="w-100" v-model="input.foodType">
+          <select class="w-100" v-model="input.input_data.foodType">
             <option v-for="type in getFoodTypes" :key="type" :value="type">{{type}}</option>
           </select>
         </div>
@@ -24,8 +24,8 @@
     </div>
     <div class="field has-addons">
       <div class="control is-expanded">
-        <input type="text" class="input" v-model="input.quantity" />
-        <p v-if="!$v.input.quantity.numeric" class="help is-danger">Needs to be numeric</p>
+        <input type="text" class="input" v-model="input.input_data.quantity" />
+        <p v-if="!$v.input.input_data.quantity.numeric" class="help is-danger">Needs to be numeric</p>
       </div>
       <p class="control">
         <a class="button is-static">grams</a>
@@ -57,7 +57,7 @@
     <ShareModal
       :isVisible="shareModalVisible"
       :inputProp="input"
-      @modalClosed="shareModalVisible = false"
+      @modalClosed="shareModalClosed()"
     />
     <InfoModal
       :isVisible="infoModalData.visible"
@@ -83,11 +83,14 @@ export default {
   data() {
     return {
       input: {
+        _id: null,
         type: "FoodInput",
         name: "",
         value: null,
-        foodType: null,
-        quantity: null
+        input_data: {
+          foodType: null,
+          quantity: null
+        }
       },
       share: false,
       shareModalVisible: false,
@@ -108,8 +111,10 @@ export default {
         required,
         numeric
       },
-      quantity: {
-        numeric
+      input_data: {
+        quantity: {
+          numeric
+        }
       }
     }
   },
@@ -117,21 +122,23 @@ export default {
     ...mapGetters(["getPostVisibility", "getFoodTypes"])
   },
   methods: {
-    ...mapActions(["addFoodInput"]),
-    addButtonClick() {
+    ...mapActions(["addInput"]),
+    async addButtonClick() {
       //function that fires once add to your intake btn is clicked
       if (!this.$v.input.$invalid) {
         //If share checkbox is checked open share modal else open modal with either success or fail depending on the addInput() outcome
-        this.input.quantity = `${this.input.quantity} grams`
-        var res = this.addFoodInput(this.input);
-        if (res) {
+        this.input.input_data.quantity = `${this.input.input_data.quantity} grams`;
+        var res = this.addInput(this.input);
+        if (await res) {
           this.infoModalData.modalColor = "is-success";
           this.infoModalData.title = "Success";
           this.infoModalData.text = "Successfuly added";
+          this.input = await res;
         } else {
           this.infoModalData.modalColor = "is-warning";
           this.infoModalData.title = "Error";
           this.infoModalData.text = "An error happened";
+          return;
         }
         if (this.share) {
           if (!res) this.infoModalData.visible = true;
@@ -139,8 +146,20 @@ export default {
         }
         if (!this.share) {
           this.infoModalData.visible = true;
+          this.clearForm();
         }
       }
+    },
+    clearForm() {
+      this.input._id = null;
+      this.input.name = "";
+      this.input.value = null;
+      this.input.input_data.foodType = null;
+      this.input.input_data.quantity = null;
+    },
+    shareModalClosed() {
+      this.shareModalVisible = false;
+      this.clearForm();
     }
   }
 };
