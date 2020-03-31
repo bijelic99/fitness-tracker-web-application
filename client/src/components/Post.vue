@@ -12,7 +12,7 @@
               <p v-if="post.user">
                 <strong class="pr-4px">{{`${post.user.firstName } ${post.user.lastName}`}}</strong>
                 <small class="pr-4px">@{{post.user.username}}</small>
-                <small class="pr-4px">31m</small>
+                <small class="pr-4px">{{timePassed}}</small>
                 <small class="pr-4px"><span class="icon is-small"><i :class="getInputTypes[post.input.type].icon"/></span></small>
                 <small class="pr-4px">{{post.input.name}}</small>
                 <small class="pr-4px">{{post.input.value}}</small>
@@ -39,6 +39,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
     name: 'Post',
     props:{
@@ -55,6 +56,17 @@ export default {
     },
     computed:{
       ...mapGetters(['getCurrentUserId', 'getInputTypes']),
+      timePassed(){
+
+        //returns time passed from post being added
+        //gives it in the largest unit that isnt 0
+        if(moment().diff(this.post.postedAt, 'days') > 0) return `${moment().diff(this.post.postedAt, 'days')} days ago`
+        else if(moment().diff(this.post.postedAt, 'hours') > 0) return `${moment().diff(this.post.postedAt, 'hours')} hours ago`
+        else if(moment().diff(this.post.postedAt, 'minutes') > 0) return `${moment().diff(this.post.postedAt, 'minutes')} minutes ago`
+        else return `${moment().diff(this.post.postedAt, 'seconds')} seconds ago`
+        
+        
+      }
     }
 
 }

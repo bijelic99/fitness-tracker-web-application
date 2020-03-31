@@ -51,6 +51,13 @@ const getters = {
         else if(postVisibilityFilterOption === 'My posts') return state.privatePosts
         else return [...state.publicPosts, ...state.friendsPosts, ...state.privatePosts].sort((a, b)=> a.postedAt > b.postedAt ? -1 : b.postedAt > a.postedAt ? 1 : 0)
     },
+    //if there are more posts on server returns true else false but for each type 
+    getPostsHaveMore: state => postVisibilityFilterOption => {
+        if(postVisibilityFilterOption === 'Public posts') return state.publicPostsPageStatus.hasMorePages
+        else if(postVisibilityFilterOption === 'Friends posts') return state.friendsPostPageStatus.hasMorePages
+        else if(postVisibilityFilterOption === 'My posts') return state.privatePostsPageStatus.hasMorePages
+        else return state.publicPostsPageStatus.hasMorePages || state.friendsPostPageStatus.hasMorePages || state.privatePostsPageStatus.hasMorePages
+    },
     getPostVisibility: state => state.postVisibility,
     getFeedFilterOptions: state => state.feedFilterOptions
 }
@@ -75,12 +82,12 @@ const actions = {
         console.log(commit, _id)
     },
     //if there are more posts available fetches them from server
-    fetchPublicPosts: ({ commit, state }) => {
-        if (state.publicPostsPageStatus.hasMorePages) {
+    fetchPublicPosts: async ({ commit, state }) => {
+        if (await state.publicPostsPageStatus.hasMorePages) {
             return axios.get('/api/posts/public', {
                 params: {
                     page: state.publicPostsPageStatus.nextPage,
-                    limit: 10
+                    limit: 5
                 }
             }).then(({ data }) => {
                 commit('APPEND_PUBLIC_POSTS', data)
@@ -88,6 +95,18 @@ const actions = {
             }).catch(() => false)
         }
         else return null
+    },
+    //dispatches action for fetching posts depending on type argument
+    fetchMorePosts: async ({ dispatch }, typeToFecth) => {
+        if(typeToFecth === 'Public posts') return dispatch('fetchPublicPosts')
+        else if(typeToFecth === 'Friends posts') return dispatch('fetchFriendsPosts')
+        else if(typeToFecth === 'My posts') return dispatch('fetchMyPosts')
+        else if(typeToFecth === 'All posts') { 
+            await dispatch('fetchMyPosts')
+            await dispatch('fetchFriendsPosts')
+            await dispatch('fetchPublicPosts')
+            return
+        }
     }
 }
 
