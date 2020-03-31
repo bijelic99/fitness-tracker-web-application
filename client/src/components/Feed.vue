@@ -20,7 +20,7 @@
     </div>
     <Post v-for="post in getPosts(selectedFilter)" :key="post._id" :post="post" />
  
-    <infinite-loading @infinite="infiniteScrollTriggered" :distance="10"/>
+    <infinite-loading @infinite="infiniteScrollTriggered" :distance="10" :identifier="selectedFilter"/>
   </div>
 </template>
 
@@ -53,8 +53,7 @@ export default {
   },
   data() {
     return {
-      selectedFilter: "Public posts",
-      loadingInProgress: false
+      selectedFilter: "Public posts"
     };
   },
   methods: {

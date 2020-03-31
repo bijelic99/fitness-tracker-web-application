@@ -29,8 +29,6 @@ const userSchema = new Schema({
         type: Schema.ObjectId,
         default: "5e7dfa91af72c22a0492241e"
     },
-    //references to our friends
-    friends: [{ type: Schema.ObjectId, ref: 'User' }],
     registered: {
         type: Date,
         default: Date.now
