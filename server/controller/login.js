@@ -17,7 +17,7 @@ router.post(route, async (req, res) => {
 
     //finds the user with given username or email
     //if not valid returns error
-    const user = await User.findOne({
+    const {password, ...user} = await User.findOne({
         $or: [{
             username: req.body.username
         },
@@ -26,10 +26,10 @@ router.post(route, async (req, res) => {
         }]
     }).exec().then(doc => doc.toObject()).catch(()=> null)
 
-    if(await user){
+    if(await user && await password){
 
     //checks password with hashed pwd stored in db
-    const validPassword = await bcrypt.compare(req.body.password, await user.password)
+    const validPassword = await bcrypt.compare(req.body.password, password)
 
     //if not valid returns error
     if (!validPassword) return res.status(400).send({ error: errorMessage })

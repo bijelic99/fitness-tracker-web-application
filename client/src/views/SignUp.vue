@@ -285,7 +285,7 @@ export default {
     setUploadProgress: function(uploadEvent) {
       this.uploadProgressBar.uploadProgress = Math.round(
         (uploadEvent.loaded / uploadEvent.total) * 100
-      );
+      )
     },
     successModalClosed(){
       this.clearForm()

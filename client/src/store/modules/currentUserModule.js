@@ -47,6 +47,32 @@ const actions = {
         if(user !== null && token !== null) commit('SIGN_IN_USER', {user: JSON.parse(user), token: token})
         axios.defaults.headers['auth-token'] = token
         
+    },
+    //once user has changed the password logs him out, if it isnt a success for any reason returns false
+    async changePassword({getters, dispatch}, password){
+        if(getters.isLoggedIn){
+            await axios.put(`/api/users/${getters.getCurrentUserId}/changePassword`, {password: password}).then(({data})=>{
+                if(data.success) {
+                    dispatch('signOut')
+                    return true
+                }
+                else return false
+            }).catch(()=>false)
+        }
+        else return false
+    },
+    //sets new picture for the user
+    async changePicture({getters, commit}, {profilePictureForm, functionToFollowTheProgress}){
+        if(getters.isLoggedIn){
+            await axios.put(`/api/users/${getters.getCurrentUserId}/changeProfilePicture`, profilePictureForm, {
+                onUploadProgress: functionToFollowTheProgress
+            } ).then(({data})=>{
+                var {picture_id} = data
+                commit('SET_NEW_PROFILE_PICTURE', picture_id)
+                sessionStorage.setItem('user', JSON.stringify(getters.getCurrentUser))
+            }).catch(()=>false)
+        }
+        else return false
     }
 }
 
@@ -60,6 +86,9 @@ const mutations = {
     SIGN_OUT_USER: (state)=>{
         state.currentUser = null
         state.token = null
+    },
+    SET_NEW_PROFILE_PICTURE: (state, picture_id)=>{
+        state.currentUser.picture_id = picture_id
     }
 }
 

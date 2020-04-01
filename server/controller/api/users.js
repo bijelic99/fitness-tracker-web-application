@@ -2,8 +2,14 @@ const express = require('express')
 const router = express.Router()
 const route = '/users'
 const User = require('../../model/user')
-const { gridfs } = require('../../middleware/profilePictureUploadMiddleware')
+const authorization  = require('../../middleware/authorization')
+const bcrypt = require('bcryptjs')
+const { profilePictureUpload, gridfs } = require('../../middleware/profilePictureUploadMiddleware')
 const mongoose = require('mongoose')
+
+
+
+
 
 // @desc Retrieves all users
 // @route GET /users
@@ -13,19 +19,51 @@ router.get(route, (req, res)=>{
     res.end()
 })
 
-router.post(route, (req, res)=>{
-    res.send("aaaaaaaab")
-    res.end()
+// @desc Changes users password
+// @route PUT /users/:userId/changePassword
+router.put(`${route}/:userId/changePassword`, authorization, async (req, res)=>{
+    var userId = req.params.userId
+    if(req.user && req.user._id === userId){
+        var user = await User.findOne({
+            _id: userId,
+        }).exec()
+        if(user) {
+            const salt = await bcrypt.genSalt(10)
+            user.password = await bcrypt.hash(req.body.password, salt)
+            await user.save()
+            return res.json({success: true})
+        }
+        else return res.sendStatus(404)
+    }
+    else return res.sendStatus(401)
 })
 
-router.put(`${route}/:id`, (req, res)=>{
-    res.send("aaaaaaaab")
-    res.end()
-})
-
-router.delete(`${route}/:id`, (req, res)=>{
-    res.send("aaaaaaaab")
-    res.end()
+// @desc Changes users profile picture
+// @route PUT /users/:userId/changeProfilePicture
+router.put(`${route}/:userId/changeProfilePicture`, [authorization, profilePictureUpload.single('profile-picture')], async (req, res)=>{
+    var userId = req.params.userId
+    if(req.user && req.user._id === userId){
+        var user = await User.findOne({
+            _id: userId,
+        }).exec()
+        if(user && req.file) {
+            try{
+                var oldPicture_id = user.picture_id
+                user.picture_id = req.file.id
+                await user.save()
+                await gridfs.then(gfs=>{
+                    gfs.remove({ _id: new mongoose.mongo.ObjectId(oldPicture_id)})
+                })
+                return res.json(user.toObject())
+            }
+            catch(err){
+                console.log(err)
+                res.sendStatus(500)
+            }
+        }
+        else return res.sendStatus(404)
+    }
+    else return res.sendStatus(401)
 })
 
 
