@@ -98,8 +98,7 @@ export default {
         user: null,
         title: "",
         text: "",
-        visibility: "Private",
-        likes: []
+        visibility: "Private"
       },
       infoModalData: {
         visible: false,
@@ -118,26 +117,36 @@ export default {
     },
     postButtonClicked() {
       //adds the post, depending on the outcome shows the modal
-      this.post.input = this.inputProp._id
+      this.post.input = this.inputProp._id;
 
       var res = this.addPost(this.post);
       if (res) {
-        this.infoModalData.modalColor = "is-success"
-        this.infoModalData.title = "Success"
-        this.infoModalData.text = "Successfuly added"
-        this.infoModalData.opperationSuccessful = true
+        this.infoModalData.modalColor = "is-success";
+        this.infoModalData.title = "Success";
+        this.infoModalData.text = "Successfuly added";
+        this.infoModalData.opperationSuccessful = true;
+        this.clearPostForm()
       } else {
-        this.infoModalData.modalColor = "is-warning"
-        this.infoModalData.title = "Error"
-        this.infoModalData.text = "An error happened"
-        this.infoModalData.opperationSuccessful = false
+        this.infoModalData.modalColor = "is-warning";
+        this.infoModalData.title = "Error";
+        this.infoModalData.text = "An error happened";
+        this.infoModalData.opperationSuccessful = false;
       }
       this.infoModalData.visible = true;
     },
-    infoModalClosed(){
+    infoModalClosed() {
       //closes the share modal if op is success leaves it open if not
-      this.infoModalData.visible = false
-      if(this.infoModalData.opperationSuccessful) this.$emit("modalClosed");
+      this.infoModalData.visible = false;
+      if (this.infoModalData.opperationSuccessful) this.$emit("modalClosed");
+    },
+    clearPostForm() {
+      this.post = {
+        input: null,
+        user: null,
+        title: "",
+        text: "",
+        visibility: "Private"
+      };
     }
   },
   computed: {
@@ -147,8 +156,7 @@ export default {
 </script>
 
 <style>
-
-.w-100{
-    width: 100%;
+.w-100 {
+  width: 100%;
 }
 </style>
