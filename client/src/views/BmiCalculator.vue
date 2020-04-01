@@ -40,9 +40,13 @@
               <input
                 type="text"
                 class="input"
-                v-model.number="input.height"
+                v-model.number="input.input_data.height"
                 placeholder="Your height"
               />
+              <p v-if="!$v.input.input_data.height.required" class="help is-danger">Required</p>
+              <p v-if="!$v.input.input_data.height.numeric" class="help is-danger">Needs to be a numeric</p>
+              <p v-if="!$v.input.input_data.height.minValue" class="help is-danger">Needs to be more than 100 cm</p>
+              <p v-if="!$v.input.input_data.height.maxValue" class="help is-danger">Needs to be less than 240 cm</p>
             </div>
             <p class="control">
               <a class="button is-static">cm</a>
@@ -55,9 +59,13 @@
               <input
                 type="text"
                 class="input"
-                v-model.number="input.mass"
+                v-model.number="input.input_data.mass"
                 placeholder="Your weight"
               />
+              <p v-if="!$v.input.input_data.mass.required" class="help is-danger">Required</p>
+              <p v-if="!$v.input.input_data.mass.numeric" class="help is-danger">Needs to be a numeric</p>
+              <p v-if="!$v.input.input_data.mass.minValue" class="help is-danger">You can't be lighter than 20 kg</p>
+              <p v-if="!$v.input.input_data.mass.maxValue" class="help is-danger">If you are more than 300kg you should consider your life choices</p>
             </div>
             <p class="control">
               <a class="button is-static">kg</a>
@@ -71,6 +79,7 @@
                 class="button is-link"
                 v-scroll-to="'#title'"
                 @click="submitButtonClicked()"
+                :disabled="$v.input.$invalid"
               >Submit</button>
             </div>
           </div>
@@ -94,6 +103,7 @@
 import { GChart } from "vue-google-charts";
 import { mapActions } from "vuex";
 import ShareModal from "../components/ShareModal";
+import { required , numeric, minValue, maxValue } from 'vuelidate/lib/validators'
 export default {
   name: "BmiCalculator",
   components: {
@@ -110,27 +120,22 @@ export default {
         visible: false
       },
       input: {
+        _id: null,  
         type: "BmiInput",
+        name: 'BMI',
         value: null,
-        height: null,
-        mass: null
+        input_data:{
+          height: null,
+          mass: null
+        }
       },
       share: false,
-      defaultChartData: [
-        ["Height", "Obese", "Overweight", "Normal weight", "Underweight"],
-        [150, 65, 55, 42, 0],
-        [160, 90, 78, 62, 48],
-        [170, 102, 88, 72, 54],
-        [180, 112, 98, 82, 60],
-        [190, 128, 108, 90, 78],
-        [200, 138, 120, 100, 74]
-      ],
       chartData: [],
       //Chart configuration
       options: {
         title: "BMI Chart",
-        hAxis: { title: "Height (Centimeters)", minValue: 160, maxValue: 200 },
-        vAxis: { title: "Weight (Kilograms)", minValue: 0, maxValue: 200 },
+        hAxis: { title: "Height (Centimeters)", minValue: 100, maxValue: 240 },
+        vAxis: { title: "Weight (Kilograms)", minValue: 0, maxValue: 260 },
         height: 360,
         colors: ["red", "orange", "green", "purple", "blue"],
         legend: {
@@ -173,35 +178,69 @@ export default {
       }
     };
   },
+  validations:{
+    input:{
+      input_data:{
+        height:{
+          required,
+          numeric,
+          minValue: minValue(100),
+          maxValue: maxValue(240)
+        },
+        mass:{
+          required,
+          numeric,
+          minValue: minValue(20),
+          maxValue: maxValue(260)
+        }
+      }
+    }
+  },
   mounted() {
-    this.chartData = this.defaultChartData;
+    this.chartData = this.bmiDefaultData;
+  },
+  computed:{
+    //used so we can have nice graph, returns matrix of values 
+    bmiDefaultData: ()=>{
+      var maxh = 241
+      var idealBmi_s = [40, 29.9, 25, 18.5]
+      var finalData = [["Height", "Obese", "Overweight", "Normal weight", "Underweight"]]
+      for(var i = 100; i<maxh; i++){
+        var arrayToAdd = [i]
+        idealBmi_s.forEach(val=>arrayToAdd.push(Number((val*i*i/10000).toFixed(2))))
+        finalData.push(arrayToAdd)
+      }
+      return finalData
+    }
   },
   methods: {
-    ...mapActions(["addBmiInput"]),
+    ...mapActions(["addInput"]),
     async addUsersBmiToChart(height, mass) {
       //takes the default chart data and adds the users input and sets it to current chart data
 
-      var newDataArray = [...this.defaultChartData];
+      var newDataArray = [...this.bmiDefaultData];
       var firstRow = [...newDataArray[0], "me"];
       var restOfArr = newDataArray.slice(1).map(arr => {
         return [...arr, null];
       });
       var newArray = [height, null, null, null, null, mass];
-
       this.chartData = [firstRow, ...restOfArr, newArray];
     },
     async submitButtonClicked() {
       //adds users bmi to server and graphs, shares it if he wants
-      this.addUsersBmiToChart(this.input.height, this.input.mass);
-      this.input.value = this.calculateBmi(this.input.height, this.input.mass);
-      if(await this.addBmiInput(this.input)) {
+      if(!this.$v.input.$invalid){
+      this.addUsersBmiToChart(this.input.input_data.height, this.input.input_data.mass);
+      this.input.value = this.calculateBmi(this.input.input_data.height, this.input.input_data.mass);
+      var returnedInput = await this.addInput(this.input)
+      if(returnedInput) {
         this.notificationData.notificationIsSuccess = true
         this.notificationData.notificationVisible = true
+        this.input = returnedInput
         }
       else{
         this.notificationData.notificationIsSuccess = false
         this.notificationData.notificationVisible = true
-      }
+      }}
     },
     //Function for bmi calculation
     calculateBmi: (height, mass) => mass / ((height / 100) * (height / 100)),

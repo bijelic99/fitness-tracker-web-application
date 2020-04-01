@@ -31,7 +31,7 @@ router.post(route, authorization, async (req, res) => {
         item.input_data = _id
     }
     else if (item.type === "BmiInput") {
-        var Bmi = require('../../model/excercise')
+        var Bmi = require('../../model/bmi')
         var newBmiInput = new Bmi(restOfObj)
         var { _id } = await newBmiInput.save()
         item.input_data = _id

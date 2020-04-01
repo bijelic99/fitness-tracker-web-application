@@ -19,7 +19,7 @@
                 </span>
               </small>
               <small class="pr-4px">{{post.input.name}}</small>
-              <small class="pr-4px">{{post.input.value}}</small>
+              <small class="pr-4px">{{post.input.value.toFixed(2)}}</small>
               <small class="pr-4px">{{getInputTypes[post.input.type].sufix}}</small>
               <br />
               <strong>{{post.title}}</strong>
@@ -71,6 +71,7 @@ export default {
     timePassed() {
       //returns time passed from post being added
       //gives it in the largest unit that isnt 0
+      if(this.post.postedAt){
       if (moment().diff(this.post.postedAt, "days") > 0)
         return `${moment().diff(this.post.postedAt, "days")} days ago`;
       else if (moment().diff(this.post.postedAt, "hours") > 0)
@@ -78,6 +79,8 @@ export default {
       else if (moment().diff(this.post.postedAt, "minutes") > 0)
         return `${moment().diff(this.post.postedAt, "minutes")} minutes ago`;
       else return `${moment().diff(this.post.postedAt, "seconds")} seconds ago`;
+      }
+      return "NaN ago"
     },
     //creates a link so we can get users pic
     profilePictureLink: function() {

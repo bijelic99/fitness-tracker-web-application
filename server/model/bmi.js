@@ -14,6 +14,6 @@ const bmiSchema = new Schema({
     
 })
 
-const Input = mongoose.model("BmiInput", bmiSchema)
+const BmiInput = mongoose.model("BmiInput", bmiSchema)
 
-module.exports = Input
+module.exports = BmiInput
