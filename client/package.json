@@ -13,6 +13,7 @@
     "bulma": "^0.8.0",
     "core-js": "^3.6.4",
     "moment": "^2.24.0",
+    "simple-web-worker": "^1.2.0",
     "vue": "^2.6.11",
     "vue-google-charts": "^0.3.2",
     "vue-infinite-loading": "^2.4.5",

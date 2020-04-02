@@ -8,7 +8,7 @@ const friendRequestSchema = new Schema({
         type: Schema.ObjectId,
         ref: "User"
     },
-    target:{
+    recipient:{
         required: true,
         type: Schema.ObjectId,
         ref: "User"
