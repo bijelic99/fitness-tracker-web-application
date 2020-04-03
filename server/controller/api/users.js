@@ -1,11 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const route = '/users'
+
 const User = require('../../model/user')
+const Friendship = require('../../model/friendship')
+
 const authorization = require('../../middleware/authorization')
 const bcrypt = require('bcryptjs')
 const { profilePictureUpload, gridfs } = require('../../middleware/profilePictureUploadMiddleware')
 const mongoose = require('mongoose')
+
 
 
 
@@ -27,7 +31,7 @@ router.get(`${route}`, async (req, res) => {
                 ]
 
         })
-        users.select("_id username email firstName lastName picture_id")
+        users.select("_id username email firstName lastName picture_id").sort('+firstName +lastName')
         return res.json(await users.lean().exec())
     }
     catch{
@@ -81,6 +85,34 @@ router.put(`${route}/:userId/changeProfilePicture`, [authorization, profilePictu
     }
     else return res.sendStatus(401)
 })
+
+
+// @desc Returns users friends
+// @route GET /users/:userId/friends
+router.get(`${route}/:user_id/friends`, authorization, async (req, res)=>{
+    var user_id = req.params.user_id
+    if(user_id === req.user._id){
+        var friendships = await Friendship.find({
+            $or:[
+                {
+                    personA: user_id
+                },
+                {
+                    personB: user_id
+                }
+            ]
+        }).lean().exec()
+        var friends = []
+        //this is used so we dont return our own id 
+        friendships.forEach(fsp => {
+            if(fsp.personA !== user_id) friends.push(fsp.personA)
+            else friends.push(fsp.personB)
+        })
+        return res.json(friends)
+    }
+    else return res.sendStatus(403)
+})
+
 
 
 module.exports = router

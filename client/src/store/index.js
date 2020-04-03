@@ -4,6 +4,7 @@ import currentUserModule from './modules/currentUserModule'
 import postsModule from './modules/postsModule'
 import usersModule from './modules/usersModule'
 import inputsModule from './modules/inputsModule'
+import friendshipsModule from './modules/friendshipsModule'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,7 @@ const store = new Vuex.Store({
   actions: {
   },
   modules: {
-    currentUserModule, postsModule, usersModule, inputsModule
+    currentUserModule, postsModule, usersModule, inputsModule, friendshipsModule
   }
 })
 

@@ -1,7 +1,7 @@
 <template>
   <div class="level">
     <div class="level-left">
-      <router-link to="/">Name of user</router-link>
+      <router-link to="/">{{request.sender.firstName}} {{request.sender.lastName}}</router-link>
     </div>
     <div class="level-right">
         <div class="level-item">
@@ -23,7 +23,13 @@
 
 <script>
 export default {
-  name: "FriendRequest"
+  name: "FriendRequest",
+  props:{
+    request: {
+      required: true,
+      type: Object
+    }
+  }
 };
 </script>
 

@@ -12,11 +12,17 @@ export default {
     Navbar
   },
   methods:{
-    ...mapActions(['signInFromSessionStorage'])
+    ...mapActions(['signInFromSessionStorage', 'startFetchingReceivedFriendRequests', 'stopFetchingReceivedFriendRequests', 'fetchFriends'])
   },
   mounted(){
     this.signInFromSessionStorage()
+    this.fetchFriends()
+    this.startFetchingReceivedFriendRequests()
+  },
+  beforeDestroy(){
+    this.stopFetchingReceivedFriendRequests()
   }
+
 }
 </script>
 

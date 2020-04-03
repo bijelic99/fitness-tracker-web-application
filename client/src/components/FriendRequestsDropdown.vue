@@ -5,7 +5,7 @@
         <span class="icon">
           <i class="fas fa-user-friends"></i>
         </span>
-        <span>10</span>
+        <span>{{getReceivedFriendRequests.length}}</span>
       </button>
     </div>
     <div class="dropdown-menu" id="friendRequestsDropdown" role="menu">
@@ -14,15 +14,10 @@
           <router-link to="/">Friend list</router-link>
         </div>
         <div class="dropdown-divider" />
-        <div class="dropdown-item">
-          <FriendRequest />
+        <div class="dropdown-item" v-for="request in getReceivedFriendRequests" :key="request._id">
+          <FriendRequest :request="request" />
         </div>
-        <div class="dropdown-item">
-          <FriendRequest />
-        </div>
-        <div class="dropdown-item">
-          <FriendRequest />
-        </div>
+        
       </div>
     </div>
   </div>
@@ -30,10 +25,14 @@
 
 <script>
 import FriendRequest from "./FriendRequest";
+import { mapGetters } from 'vuex';
 export default {
   name: "FriendRequestsDropdown",
   components: {
     FriendRequest
+  },
+  computed:{
+    ...mapGetters(['getReceivedFriendRequests'])
   }
 };
 </script>

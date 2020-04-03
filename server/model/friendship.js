@@ -20,6 +20,6 @@ const friendshipSchema = new Schema({
     
 })
 
-const Friendship = mongoose.model("Friendship", bmiSchema)
+const Friendship = mongoose.model("Friendship", friendshipSchema)
 
 module.exports = Friendship

@@ -17,12 +17,13 @@ const getters = {
 
 const actions = {
     //Signs user in, retrieves validation token from server
-    async signIn({commit}, credentials){
+    async signIn({commit, dispatch}, credentials){
         return await axios.post('/login', credentials).then(({data})=>{
             sessionStorage.setItem('auth-token', data.token)
             sessionStorage.setItem('user', JSON.stringify(data.user))
             commit('SIGN_IN_USER', data)
             axios.defaults.headers['auth-token'] = data.token
+            dispatch('startFetchingReceivedFriendRequests')
             router.push('/')
             return true
         }).catch(()=>{
@@ -33,10 +34,11 @@ const actions = {
         })
     },
     //Signs out current user
-    signOut({commit}){
+    signOut({commit, dispatch}){
         sessionStorage.removeItem('auth-token')
         sessionStorage.removeItem('user')
         axios.defaults.headers['auth-token'] = ''
+        dispatch('stopFetchingReceivedFriendRequests')
         commit('SIGN_OUT_USER')
         router.push('/SignIn')
     },

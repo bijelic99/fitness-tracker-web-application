@@ -20,6 +20,6 @@ const friendRequestSchema = new Schema({
     
 })
 
-const FriendRequest = mongoose.model("FriendRequest", bmiSchema)
+const FriendRequest = mongoose.model("FriendRequest", friendRequestSchema)
 
 module.exports = FriendRequest

@@ -24,8 +24,8 @@ router.post(route, async (req, res) => {
         {
             email: req.body.email
         }]
-    }).exec().then(doc => doc.toObject()).catch(()=> null)
-
+    }).lean().exec()
+    
     if(await user && await password){
 
     //checks password with hashed pwd stored in db
