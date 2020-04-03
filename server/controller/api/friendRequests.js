@@ -89,7 +89,7 @@ router.post(`${route}/respond`, authorization, async (req, res) => {
                     _id: req.body.request_id
                 }).exec()
                 if (friendRequest) {
-                    if (friendRequest.recipient_id.toString() === user_id) {
+                    if (friendRequest.recipient.toString() === user_id) {
                         var friendship = null
                         if (accepted) {
                             friendship = new Friendship({
@@ -106,7 +106,8 @@ router.post(`${route}/respond`, authorization, async (req, res) => {
                     else return res.sendStatus(403)
                 }
                 else return res.sendStatus(404)
-            } catch{
+            } catch(err){
+                console.log(err)
                 return res.sendStatus(500)
             }
         } else return res.sendStatus(403)
