@@ -10,23 +10,36 @@ const authorization = require('../../middleware/authorization')
 
 const route = '/inputs'
 
-//for user to be able to add an input he needs to be logged in first
-//delete comment below later to add authorization
+router.get(`${route}/user/:userId`, authorization, async (req, res) => {
+    var userId = req.params.userId
+    if (userId === req.user._id) {
+        var inputs = await Input.find({
+            user_id: userId
+        }).populate('input_data').populate({
+            path: 'user_id',
+            select: 'username firstName lastName'
+        }).lean().exec()
+        res.json(inputs)
+    }
+    else return res.sendStatus(403)
+})
 
+
+//for user to be able to add an input he needs to be logged in first
 router.post(route, authorization, async (req, res) => {
     //adds the input in coresponding db tables
     //after that adds the entry to inputs table
     var item = req.body
-    var { _id: invalid_id, ...restOfObj} = item.input_data
+    var { _id: invalid_id, ...restOfObj } = item.input_data
     if (item.type === "FoodInput") {
         var Food = require('../../model/food')
         var newFoodInput = new Food(restOfObj)
         var { _id } = await newFoodInput.save()
         item.input_data = _id
     }
-    else if (item.type === "ExcerciseInput") {
-        var Excercise = require('../../model/excercise')
-        var newExerciseInput = new Excercise(restOfObj)
+    else if (item.type === "ExerciseInput") {
+        var Exercise = require('../../model/exercise')
+        var newExerciseInput = new Exercise(restOfObj)
         var { _id } = await newExerciseInput.save()
         item.input_data = _id
     }

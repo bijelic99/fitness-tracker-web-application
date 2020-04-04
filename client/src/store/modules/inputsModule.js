@@ -7,22 +7,25 @@ const state = {
     inputTypes: {
         'BmiInput': {
             icon: 'fas fa-burn',
-            sufix: 'bmi'
+            sufix: 'bmi',
+            name: 'Bmi input'
         },
         'FoodInput': {
             icon: 'fas fa-hamburger',
-            sufix: 'calories added'
+            sufix: 'calories added',
+            name: 'Food input'
         },
-        'ExcerciseInput': {
+        'ExerciseInput': {
             icon: 'fas fa-dumbbell',
-            sufix: 'calories burned'
+            sufix: 'calories burned',
+            name: 'Exercise input'
         }
     },
     foodTypes: [
         'Vegan',
         'Non vegan'
     ],
-    excerciseTypes: [
+    exerciseTypes: [
         'Pushups',
         'Situps'
     ],
@@ -31,7 +34,8 @@ const state = {
 const getters = {
     getInputTypes: state => state.inputTypes,
     getFoodTypes: state => state.foodTypes,
-    getExcerciseTypes: state => state.excerciseTypes
+    getExerciseTypes: state => state.exerciseTypes,
+    getInputs: state => state.inputs
 
 }
 
@@ -46,11 +50,23 @@ const actions = {
             }).catch(() => false)
         }
         else return false
+    },
+    fetchInputs: ({commit, getters}) =>{
+        if (getters.isLoggedIn) {
+            return axios.get(`/api/inputs/user/${getters.getCurrentUserId}`).then(({data})=>{
+                commit('SET_INPUTS', data)
+                return true
+            }).catch(()=>false)
+        }
     }
 }
 
 const mutations = {
-    ADD_INPUT: (state, input) => state.inputs.push(input)
+    ADD_INPUT: (state, input) => state.inputs.push(input),
+    SET_INPUTS: (state, inputs) => state.inputs = inputs,
+    CLEAR_DATA: (state)=>{
+        state.input = []
+    }
 }
 
 export default {

@@ -11,7 +11,7 @@
     <div class="dropdown-menu" id="friendRequestsDropdown" role="menu">
       <div class="dropdown-content">
         <div class="dropdown-item">
-          <router-link to="/">Friend list</router-link>
+          <router-link to="/FriendList">Friend list</router-link>
         </div>
         <div class="dropdown-divider" />
         <div class="dropdown-item" v-for="request in getReceivedFriendRequests" :key="request._id">

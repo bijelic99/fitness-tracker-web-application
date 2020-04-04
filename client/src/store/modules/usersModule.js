@@ -26,7 +26,10 @@ const mutations = {
     SET_SEARCH_RESULTS: (state, users) => {
         state.users = users
     },
-    CLEAR_SEARCH_RESULTS: state => state.users = []
+    CLEAR_SEARCH_RESULTS: state => state.users = [],
+    CLEAR_DATA: (state)=>{
+        state.users = []
+    }
 }
 
 export default {

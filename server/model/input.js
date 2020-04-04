@@ -13,7 +13,7 @@ const inputSchema = new Schema({
     type: {
         type: String,
         required: true,
-        enum: ['BmiInput', 'ExcerciseInput', 'FoodInput']
+        enum: ['BmiInput', 'ExerciseInput', 'FoodInput']
     },
     name:{
         type: String,
@@ -27,6 +27,10 @@ const inputSchema = new Schema({
         type: Schema.ObjectId,
         required: true,
         refPath: 'type'
+    },
+    added_at:{
+        type: Date,
+        default: Date.now
     }
 })
 

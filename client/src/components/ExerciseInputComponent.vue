@@ -1,18 +1,18 @@
 <template>
   <div class="container">
     <div class="field">
-      <label for class="label">Excercise:</label>
+      <label for class="label">Exercise:</label>
       <div class="control">
         <input type="text" class="input" v-model.trim="input.name" />
         <p v-if="!$v.input.name.required" class="help is-danger">Required</p>
       </div>
     </div>
     <div class="field w-100">
-      <label for class="label">Type of excercise:</label>
+      <label for class="label">Type of exercise:</label>
       <div class="control">
         <div class="select w-100">
-          <select class="w-100" v-model="input.input_data.excerciseType">
-            <option v-for="type in getExcerciseTypes" :key="type" :value="type">{{type}}</option>
+          <select class="w-100" v-model="input.input_data.exerciseType">
+            <option v-for="type in getExerciseTypes" :key="type" :value="type">{{type}}</option>
           </select>
         </div>
       </div>
@@ -60,7 +60,7 @@
           :disabled="$v.input.$invalid"
           class="button is-link"
           @click="addButtonClick()"
-        >Add to your daily excercise</button>
+        >Add to your daily exercise</button>
       </div>
     </div>
     <ShareModal
@@ -84,23 +84,23 @@ import ShareModal from "./ShareModal";
 import InfoModal from "./InfoModal";
 import { required, numeric } from "vuelidate/lib/validators";
 export default {
-  name: "ExcerciseInputComponent",
+  name: "ExerciseInputComponent",
   components: {
     ShareModal,
     InfoModal
   },
   computed: {
-    ...mapGetters(["getPostVisibility", "getExcerciseTypes"])
+    ...mapGetters(["getPostVisibility", "getExerciseTypes"])
   },
   data() {
     return {
       input: {
         _id: null,
-        type: "ExcerciseInput",
+        type: "ExerciseInput",
         name: "",
         value: null,
         input_data: {
-          excerciseType: "",
+          exerciseType: "",
           length: ""
         }
       },
@@ -134,7 +134,7 @@ export default {
   methods: {
     ...mapActions(["addInput"]),
     async addButtonClick() {
-      //Function is triggered once Add to your daily excercise is clicked
+      //Function is triggered once Add to your daily exercise is clicked
       if (!this.$v.input.$invalid) {
         this.input.input_data.length = `${this.input.input_data.length} ${this.lengthUnit}`;
         //If share checkbox is checked open share modal else open modal with either success or fail depending on the addInput() outcome
@@ -165,7 +165,7 @@ export default {
       this.input._id = null
       this.input.name = "";
       this.input.value = null;
-      this.input.input_data.excerciseType = "";
+      this.input.input_data.exerciseType = "";
       this.input.input_data.length = "";
     },
     shareModalClosed(){

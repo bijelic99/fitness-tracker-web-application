@@ -40,7 +40,16 @@ const routes = [
     name: 'FindPeople',
     component: ()=> import('../views/FindPeople.vue')
   },
-
+  {
+    path: '/MyInputs',
+    name: 'MyInputs',
+    component: ()=> import('../views/MyInputs.vue')
+  },
+  {
+    path: '/FriendList',
+    name: 'FriendList',
+    component: ()=> import('../views/FriendList.vue')
+  }
 
 ]
 

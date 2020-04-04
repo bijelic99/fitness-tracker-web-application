@@ -12,9 +12,12 @@ const getters = {
     getReceivedFriendRequests: (state) => state.receivedFriendRequests,
     //returns sent friendRequest, undefined if there is none with that recipient_id
     getSentFriendRequest: (state) => (recipient_id) => state.sentFriendRequests.find(fr => fr.recipient._id === recipient_id),
-    getFriends: state => state.friends,
-    getIfUserHasSentRequestToUser: state => user_id => state.sentFriendRequests.filter(fr => fr.recipient._id === user_id).length > 0 ? true : false,
-    getIfUserHasRequestFromUser: state => user_id => state.receivedFriendRequests.filter(fr=>fr.sender._id === user_id).length > 0 ? true : false,
+    //returns list of friends ids
+    getFriends: state => state.friends.map(fr=>fr._id),
+    //returns list of friends as objects
+    getFriendsObjects: state=>state.friends,
+    getIfUserHasSentRequestToUser: state => user_id => state.sentFriendRequests.filter(fr => fr.recipient === user_id).length > 0 ? true : false,
+    getIfUserHasRequestFromUser: state => user_id => state.receivedFriendRequests.filter(fr => fr.sender._id === user_id).length > 0 ? true : false,
 }
 
 const actions = {
@@ -52,8 +55,8 @@ const actions = {
         }
     },
     //to be able to receive friend request without refresh we dispatch periodicallyFetchReceivedFriendRequests every n seconds
-    startFetchingReceivedFriendRequests: ({ dispatch, getters }) => {
-        if (getters.isLoggedIn) {
+    startFetchingReceivedFriendRequests: ({ dispatch, getters, state }) => {
+        if (getters.isLoggedIn && state.receivedRequestCheckInterval === null) {
             dispatch('fetchReceivedFriendRequests')
             dispatch('periodicallyFetchReceivedFriendRequests', 10)
         }
@@ -90,12 +93,12 @@ const actions = {
         else return false
     },
     //sends a friend request
-    sendFriendRequest: ({commit, getters}, recipient_id)=>{
+    sendFriendRequest: ({ commit, getters }, recipient_id) => {
         if (getters.isLoggedIn) {
-            return axios.post(`/api/friend-requests`,{
+            return axios.post(`/api/friend-requests`, {
                 sender_id: getters.getCurrentUserId,
                 recipient_id: recipient_id
-            }).then(({data})=>commit('ADD_SENT_FRIEND_REQUEST', data))
+            }).then(({ data }) => commit('ADD_SENT_FRIEND_REQUEST', data))
         }
         else return false
     }
@@ -133,7 +136,18 @@ const mutations = {
     SET_FRIENDS: (state, friends) => {
         state.friends = friends
     },
-    ADD_SENT_FRIEND_REQUEST: (state, request)=> state.sentFriendRequests.push(request)
+    ADD_SENT_FRIEND_REQUEST: (state, request) => state.sentFriendRequests.push(request),
+    CLEAR_DATA: (state) => {
+        state.receivedFriendRequests = []
+        state.sentFriendRequests = []
+        state.friends = []
+        try{
+            clearInterval(state.receivedRequestCheckInterval)
+        }
+        finally{
+            state.receivedRequestCheckInterval = null
+        }
+    }
 }
 
 export default {

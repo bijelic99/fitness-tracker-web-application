@@ -71,9 +71,11 @@ router.put(`${route}/:userId/changeProfilePicture`, [authorization, profilePictu
                 var oldPicture_id = user.picture_id
                 user.picture_id = req.file.id
                 await user.save()
-                await gridfs.then(gfs => {
-                    gfs.remove({ _id: new mongoose.mongo.ObjectId(oldPicture_id) })
-                })
+                if (oldPicture_id.toString() !== "5e7dfa91af72c22a0492241e") {
+                    await gridfs.then(gfs => {
+                        gfs.remove({ _id: new mongoose.mongo.ObjectId(oldPicture_id) })
+                    })
+                }
                 return res.json(user.toObject())
             }
             catch (err) {
@@ -89,11 +91,11 @@ router.put(`${route}/:userId/changeProfilePicture`, [authorization, profilePictu
 
 // @desc Returns users friends
 // @route GET /users/:userId/friends
-router.get(`${route}/:user_id/friends`, authorization, async (req, res)=>{
+router.get(`${route}/:user_id/friends`, authorization, async (req, res) => {
     var user_id = req.params.user_id
-    if(user_id === req.user._id){
+    if (user_id === req.user._id) {
         var friendships = await Friendship.find({
-            $or:[
+            $or: [
                 {
                     personA: user_id
                 },
@@ -101,11 +103,17 @@ router.get(`${route}/:user_id/friends`, authorization, async (req, res)=>{
                     personB: user_id
                 }
             ]
+        }).populate({
+            path: 'personA',
+            select: 'username firstName lastName email picture_id'
+        }).populate({
+            path: 'personB',
+            select: 'username firstName lastName email picture_id'
         }).lean().exec()
         var friends = []
         //this is used so we dont return our own id 
         friendships.forEach(fsp => {
-            if(fsp.personA !== user_id) friends.push(fsp.personA)
+            if (fsp.personA._id.toString() !== user_id) friends.push(fsp.personA)
             else friends.push(fsp.personB)
         })
         return res.json(friends)

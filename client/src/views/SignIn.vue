@@ -2,7 +2,7 @@
   <div class="section">
     <div class="container sign-up-container">
       <div class="panel">
-        <p class="panel-heading">Sign up</p>
+        <p class="panel-heading">Sign in</p>
         <div class="panel-block">
           <div class="field">
             <label class="label">Username</label>

@@ -20,7 +20,7 @@ router.post(route, authorization, async (req, res) => {
     var { _id } = await post.save()
     res.json(await Post.findOne({
         _id: _id
-    }).populate('input').populate({path: 'user', select: '_id firstName lastName username'}).lean().exec())
+    }).populate('input').populate({path: 'user', select: '_id firstName lastName username picture_id'}).lean().exec())
 })
 
 router.use(route, publicPosts)

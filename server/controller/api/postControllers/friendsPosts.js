@@ -15,9 +15,9 @@ router.get(`${route}/:userId`, async (req, res) => {
 
 
     if (userId === req.user._id) {
-
+        var friends = []
         //gets list of users friends
-        var { friends } = await Friendship.find({
+        var friendships = await Friendship.find({
             $or: [
                 {
                     personA: userId
@@ -27,10 +27,11 @@ router.get(`${route}/:userId`, async (req, res) => {
                 }
             ]
         }).lean().exec()
-        var friends = friends.reduce((el, arr) => {
-            if (el.personA !== userId) return [...arr, el.personA]
-            else return [...arr, el.personB]
-        }, [])
+        
+        friendships.forEach(function(fsp) {
+            if(fsp.personA.toString() !== userId) friends.push(fsp.personA)
+            else friends.push(fsp.personB)
+        })
         //finds the data in the database, sorts it by time of creation, returns it to user, takes limit and page in to account
         Post.paginate({
             user: { $in: friends },

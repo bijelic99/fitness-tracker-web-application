@@ -12,7 +12,7 @@
           <p class="subtitle is-6">@{{user.username}}</p>
         </div>
         <div class="media-right">
-          <button class="button is-primary" :disabled="!ableToSendFriendRequest" @click="sendRequestBtnClicked()">
+          <button class="button is-primary" v-if="addFriendVisible" :disabled="!ableToSendFriendRequest" @click="sendRequestBtnClicked()">
             <span class="icon">
               <i class="fas fa-plus"></i>
             </span>
@@ -32,6 +32,10 @@ export default {
       type: Object,
       required: true,
       default: null
+    },
+    addFriendVisible:{
+      type: Boolean,
+      default: true
     }
   },
   computed:{

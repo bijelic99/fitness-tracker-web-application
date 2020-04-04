@@ -48,7 +48,7 @@ router.get(`${route}/:user_id/received`, authorization, async (req, res) => {
             }).sort("-sentAt").lean().exec()
             return res.json(friendRequests)
         }
-        catch(err){
+        catch (err) {
             console.log(err)
             return res.sendStatus(500)
         }
@@ -101,12 +101,15 @@ router.post(`${route}/respond`, authorization, async (req, res) => {
                         await FriendRequest.deleteOne({
                             _id: friendRequest._id
                         }).exec()
-                        res.json( friendship )
+                        res.json(await Friendship.findById(friendship._id).populate({
+                            path: 'personA',
+                            select: 'username firstName lastName email picture_id'
+                        }).lean().exec())
                     }
                     else return res.sendStatus(403)
                 }
                 else return res.sendStatus(404)
-            } catch(err){
+            } catch (err) {
                 console.log(err)
                 return res.sendStatus(500)
             }
