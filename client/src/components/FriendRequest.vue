@@ -1,7 +1,7 @@
 <template>
   <div class="level">
     <div class="level-left">
-      <router-link to="/">{{request.sender.firstName}} {{request.sender.lastName}}</router-link>
+      <router-link :to="`/User/${request.sender.username}`">{{request.sender.firstName}} {{request.sender.lastName}}</router-link>
     </div>
     <div class="level-right">
         <div class="level-item">

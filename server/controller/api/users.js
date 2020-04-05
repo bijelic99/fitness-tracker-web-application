@@ -31,8 +31,23 @@ router.get(`${route}`, async (req, res) => {
                 ]
 
         })
-        users.select("_id username email firstName lastName picture_id").sort('+firstName +lastName')
+        users.select("username email firstName lastName picture_id registered").sort('+firstName +lastName')
         return res.json(await users.lean().exec())
+    }
+    catch{
+        return res.sendStatus(500)
+    }
+})
+
+// @desc Retrieves single user
+// @route GET /users/:username
+router.get(`${route}/:username`, async (req, res) => {
+    try {
+        var user = await User.findOne({
+            username: req.params.username
+        }).select("username email firstName lastName picture_id registered").lean().exec()
+        if(user) return res.json(user)
+        else return res.sendStatus(404)
     }
     catch{
         return res.sendStatus(500)

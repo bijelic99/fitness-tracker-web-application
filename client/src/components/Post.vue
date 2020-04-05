@@ -10,8 +10,8 @@
         <div class="media-content">
           <div class="content">
             <p v-if="post.user">
-              <strong class="pr-4px">{{`${post.user.firstName } ${post.user.lastName}`}}</strong>
-              <small class="pr-4px">@{{post.user.username}}</small>
+              <strong class="pr-4px"><router-link :to="`/User/${post.user.username}`">{{`${post.user.firstName } ${post.user.lastName}`}}</router-link></strong>
+              <small class="pr-4px"><router-link :to="`/User/${post.user.username}`">@{{post.user.username}}</router-link></small>
               <small class="pr-4px">{{timePassed}}</small>
               <small class="pr-4px">
                 <span class="icon is-small">

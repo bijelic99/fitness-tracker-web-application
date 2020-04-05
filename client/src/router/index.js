@@ -49,6 +49,12 @@ const routes = [
     path: '/FriendList',
     name: 'FriendList',
     component: ()=> import('../views/FriendList.vue')
+  },
+  {
+    path: '/User/:username',
+    name: 'UserProfile',
+    component: ()=> import('../views/UserProfile.vue'),
+    props: true
   }
 
 ]

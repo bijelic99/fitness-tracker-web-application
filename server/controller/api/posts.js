@@ -23,6 +23,40 @@ router.post(route, authorization, async (req, res) => {
     }).populate('input').populate({path: 'user', select: '_id firstName lastName username picture_id'}).lean().exec())
 })
 
+// @desc Updates post in database, only title and text can be changed, user needs to be authorized and it needs to be his post
+// @route PATCH /posts/:postId
+router.patch(`${route}/:postId`, authorization, async (req, res)=>{
+    var userId = req.user._id
+    var postId = req.params.postId
+    var post = Post.findById(postId).exec()
+    if(post){
+        if(post.user.toString() === userId){
+            if(req.body.title) post.title = req.body.title
+            if(req.body.text) post.text = req.body.text
+            return res.json(await post.save())
+        }
+        else return res.sendStatus(403)
+    }
+    else return res.sendStatus(404)
+
+})
+
+// @desc Deletes post from database, user needs to be authorized and it needs to be his post
+// @route DELETE /posts/:postId
+router.delete(`${route}/:postId`, authorization, async (req, res)=>{
+    var userId = req.user._id
+    var postId = req.params.postId
+    var post = Post.findById(postId).exec()
+    if(post){
+        if(post.user.toString() === userId){
+            return res.json(await Post.findByIdAndDelete(post._id).exec())
+        }
+        else return res.sendStatus(403)
+    }
+    else return res.sendStatus(404)
+
+})
+
 router.use(route, publicPosts)
 router.use(route, authorization, usersPost)
 router.use(route, authorization, friendsPosts)

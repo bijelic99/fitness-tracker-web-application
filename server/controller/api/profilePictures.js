@@ -21,7 +21,12 @@ router.get('/profile-pictures/:picture_id/:width/:height', (req, res) => {
                 }
 
                 var readStream = gfs.createReadStream(file.filename)
-                var imageResize = sharp().resize(width, height, 'contain')
+                var imageResize = sharp().resize({
+                    width: width,
+                    height: height,
+                    fit: sharp.fit.contain,
+                    background: {r:0, g:0, b:0, alpha: 0}
+                }).png()
                 readStream.pipe(imageResize).pipe(res)
 
             })
