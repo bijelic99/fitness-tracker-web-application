@@ -9,23 +9,58 @@
         </div>
         <div class="media-content">
           <div class="content">
-            <p v-if="post.user">
-              <strong class="pr-4px"><router-link :to="`/User/${post.user.username}`">{{`${post.user.firstName } ${post.user.lastName}`}}</router-link></strong>
-              <small class="pr-4px"><router-link :to="`/User/${post.user.username}`">@{{post.user.username}}</router-link></small>
-              <small class="pr-4px">{{timePassed}}</small>
-              <small class="pr-4px">
-                <span class="icon is-small">
-                  <i :class="getInputTypes[post.input.type].icon" />
+            <div v-if="post.user">
+              <span class="level is-marginless">
+                <span class="level-left">
+                  <span class="level-item">
+                    <strong>
+                      <router-link
+                        :to="`/User/${post.user.username}`"
+                      >{{`${post.user.firstName } ${post.user.lastName}`}}</router-link>
+                    </strong>
+                    <small class="pr-4px">
+                      <router-link :to="`/User/${post.user.username}`">@{{post.user.username}}</router-link>
+                    </small>
+
+                    <strong>{{post.title}}</strong>
+                  </span>
                 </span>
-              </small>
-              <small class="pr-4px">{{post.input.name}}</small>
-              <small class="pr-4px">{{post.input.value.toFixed(2)}}</small>
-              <small class="pr-4px">{{getInputTypes[post.input.type].sufix}}</small>
-              <br />
-              <strong>{{post.title}}</strong>
-              <br />
-              {{post.text}}
-            </p>
+                <span class="level-right">
+                  <span class="level-item">
+                    <button class="button">
+                      <span class="icon is-small">
+                        <i class="fas fa-edit" />
+                      </span>
+                    </button>
+                  </span>
+                  <span class="level-item">
+                    <button class="button">
+                      <span class="icon is-small">
+                        <i class="fas fa-trash" />
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </span>
+
+              <span class="level">
+                <span class="level-left">
+                  <small class="pr-4px">{{timePassed}}</small>
+                  <small class="pr-4px">
+                    <span class="icon is-small">
+                      <i :class="getInputTypes[post.input.type].icon" />
+                    </span>
+                  </small>
+                  <small class="pr-4px">{{post.input.name}}</small>
+                  <small class="pr-4px">{{post.input.value.toFixed(2)}}</small>
+                  <small class="pr-4px">{{getInputTypes[post.input.type].sufix}}</small>
+                </span>
+                <span class="level-right"></span>
+              </span>
+              <p>
+                {{post.text}}
+              </p>
+            </div>
           </div>
           <nav class="level is-mobile">
             <div class="level-left">
@@ -40,7 +75,9 @@
               <small class="is-small">{{post.likes.length}}</small>
             </div>
             <div class="level-right">
-              <small class="is-small">{{post.visibility}}</small>
+              <div class="level-item">
+                <small class="is-small">{{post.visibility}}</small>
+              </div>
             </div>
           </nav>
         </div>
@@ -71,16 +108,17 @@ export default {
     timePassed() {
       //returns time passed from post being added
       //gives it in the largest unit that isnt 0
-      if(this.post.postedAt){
-      if (moment().diff(this.post.postedAt, "days") > 0)
-        return `${moment().diff(this.post.postedAt, "days")} days ago`;
-      else if (moment().diff(this.post.postedAt, "hours") > 0)
-        return `${moment().diff(this.post.postedAt, "hours")} hours ago`;
-      else if (moment().diff(this.post.postedAt, "minutes") > 0)
-        return `${moment().diff(this.post.postedAt, "minutes")} minutes ago`;
-      else return `${moment().diff(this.post.postedAt, "seconds")} seconds ago`;
+      if (this.post.postedAt) {
+        if (moment().diff(this.post.postedAt, "days") > 0)
+          return `${moment().diff(this.post.postedAt, "days")} days ago`;
+        else if (moment().diff(this.post.postedAt, "hours") > 0)
+          return `${moment().diff(this.post.postedAt, "hours")} hours ago`;
+        else if (moment().diff(this.post.postedAt, "minutes") > 0)
+          return `${moment().diff(this.post.postedAt, "minutes")} minutes ago`;
+        else
+          return `${moment().diff(this.post.postedAt, "seconds")} seconds ago`;
       }
-      return "NaN ago"
+      return "NaN ago";
     },
     //creates a link so we can get users pic
     profilePictureLink: function() {
@@ -96,5 +134,8 @@ export default {
 }
 .pr-4px {
   padding-right: 4px;
+}
+.row-height-adjust{
+  line-height: 0.5rem !important;
 }
 </style>
