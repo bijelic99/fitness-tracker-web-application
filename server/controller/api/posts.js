@@ -28,11 +28,12 @@ router.post(route, authorization, async (req, res) => {
 router.patch(`${route}/:postId`, authorization, async (req, res)=>{
     var userId = req.user._id
     var postId = req.params.postId
-    var post = Post.findById(postId).exec()
+    var post = await Post.findById(postId).exec()
     if(post){
         if(post.user.toString() === userId){
             if(req.body.title) post.title = req.body.title
             if(req.body.text) post.text = req.body.text
+            if(req.body.visibility) post.visibility = req.body.visibility
             return res.json(await post.save())
         }
         else return res.sendStatus(403)
@@ -46,9 +47,9 @@ router.patch(`${route}/:postId`, authorization, async (req, res)=>{
 router.delete(`${route}/:postId`, authorization, async (req, res)=>{
     var userId = req.user._id
     var postId = req.params.postId
-    var post = Post.findById(postId).exec()
-    if(post){
-        if(post.user.toString() === userId){
+    var post = await Post.findById(postId).exec()
+    if(await post){
+        if(await post.user.toString() === userId){
             return res.json(await Post.findByIdAndDelete(post._id).exec())
         }
         else return res.sendStatus(403)

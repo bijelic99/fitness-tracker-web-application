@@ -140,6 +140,20 @@ const actions = {
             await dispatch('fetchPublicPosts')
             return
         }
+    },
+    //used to delete post from server and state
+    deletePost: ({ commit }, post_id) => {
+        return axios.delete(`/api/posts/${post_id}`).then(() => {
+            commit('DELETE_POST', post_id)
+            return true
+        }).catch(() => false)
+    },
+    //used to edit post from server and state only text title and privacy can be changed
+    editPost: ({ commit }, post) => {
+        return axios.patch(`/api/posts/${post._id}`, post).then(({ data }) => {
+            commit('SET_POST', data)
+            return true
+        }).catch(() => false)
     }
 }
 
@@ -186,6 +200,14 @@ const mutations = {
             nextPage: 1,
             hasMorePages: true
         }
+    },
+    DELETE_POST: (state, post_id) => {
+        var index = state.privatePosts.findIndex(post => post._id === post_id)
+        state.privatePosts.splice(index)
+    },
+    SET_POST: (state, post) => {
+        var index = state.privatePosts.findIndex(p => p._id === post._id)
+        state.privatePosts[index] = post
     }
 }
 

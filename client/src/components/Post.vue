@@ -25,22 +25,6 @@
                     <strong>{{post.title}}</strong>
                   </span>
                 </span>
-                <span class="level-right">
-                  <span class="level-item">
-                    <button class="button">
-                      <span class="icon is-small">
-                        <i class="fas fa-edit" />
-                      </span>
-                    </button>
-                  </span>
-                  <span class="level-item">
-                    <button class="button">
-                      <span class="icon is-small">
-                        <i class="fas fa-trash" />
-                      </span>
-                    </button>
-                  </span>
-                </span>
               </span>
 
               <span class="level">
@@ -57,9 +41,7 @@
                 </span>
                 <span class="level-right"></span>
               </span>
-              <p>
-                {{post.text}}
-              </p>
+              <p>{{post.text}}</p>
             </div>
           </div>
           <nav class="level is-mobile">
@@ -81,6 +63,27 @@
             </div>
           </nav>
         </div>
+        <div class="media-right" v-if="showEditAndDeleteOptions">
+          <div class="dropdown is-hoverable">
+            <div class="dropdown-trigger">
+              <div class="button" aria-haspopup="true" aria-controls="dropdown-menu3">
+                <span class="icon is-small">
+                  <i class="fas fa-angle-down" />
+                </span>
+              </div>
+            </div>
+            <div class="dropdown-menu" id="menu">
+              <div class="dropdown-content">
+                <a class="dropdown-item">
+                  <EditPostModalComponent :post="post"/>
+                </a>
+                <a class="dropdown-item">
+                  <DeletePostModalComponent :post="post"/>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </article>
     </div>
   </div>
@@ -89,8 +92,13 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import moment from "moment";
+import DeletePostModalComponent from '../components/DeletePostModalComponent'
+import EditPostModalComponent from '../components/EditPostModalComponent'
 export default {
   name: "Post",
+  components:{
+    DeletePostModalComponent, EditPostModalComponent
+  },
   props: {
     post: {
       type: Object,
@@ -104,7 +112,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getCurrentUserId", "getInputTypes"]),
+    ...mapGetters(["getCurrentUserId", "getInputTypes", 'isLoggedIn', 'getCurrentUserId']),
     timePassed() {
       //returns time passed from post being added
       //gives it in the largest unit that isnt 0
@@ -123,6 +131,9 @@ export default {
     //creates a link so we can get users pic
     profilePictureLink: function() {
       return `${process.env.VUE_APP_SERVER_ADDRESS}api/profile-pictures/${this.post.user.picture_id}/140/140`;
+    },
+    showEditAndDeleteOptions: function(){
+      return this.post && this.isLoggedIn && this.post.user._id === this.getCurrentUserId 
     }
   }
 };
@@ -135,7 +146,7 @@ export default {
 .pr-4px {
   padding-right: 4px;
 }
-.row-height-adjust{
+.row-height-adjust {
   line-height: 0.5rem !important;
 }
 </style>
