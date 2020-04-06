@@ -132,7 +132,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addInput"]),
+    ...mapActions(["addInput", 'fetchExerciseTypes']),
     async addButtonClick() {
       //Function is triggered once Add to your daily exercise is clicked
       if (!this.$v.input.$invalid) {
@@ -172,6 +172,9 @@ export default {
       this.shareModalVisible = false
       this.clearForm()
     }
+  },
+  mounted(){
+    this.fetchExerciseTypes()
   }
 };
 </script>

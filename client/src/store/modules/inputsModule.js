@@ -25,10 +25,7 @@ const state = {
         'Vegan',
         'Non vegan'
     ],
-    exerciseTypes: [
-        'Pushups',
-        'Situps'
-    ],
+    exerciseTypes: [],
 }
 
 const getters = {
@@ -58,6 +55,13 @@ const actions = {
                 return true
             }).catch(()=>false)
         }
+    },
+    //fetches exercise types from server
+    fetchExerciseTypes: ({commit}) => {
+        return axios.get('/api/exercise-types').then(({data})=>{
+            commit('SET_EXERCISE_TYPES', data.map(et=>et.exercise_name))
+            return true
+        }).catch(()=>false)
     }
 }
 
@@ -66,7 +70,8 @@ const mutations = {
     SET_INPUTS: (state, inputs) => state.inputs = inputs,
     CLEAR_DATA: (state)=>{
         state.input = []
-    }
+    },
+    SET_EXERCISE_TYPES: (state, et) => state.exerciseTypes = et
 }
 
 export default {
