@@ -224,4 +224,16 @@ export default {
   width: 384px;
   height: 384px;
 }
+@media (max-width: 1024px) {
+    .profile-container {
+      grid-template-columns: 1fr;
+      
+    }
+    .profile-info-container{
+      grid-template-columns: 1fr;
+    }
+    .profile-info-element:nth-child(odd){
+      margin-top: 20px;
+    }
+}
 </style>

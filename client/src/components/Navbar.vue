@@ -8,13 +8,14 @@
         aria-label="menu"
         aria-expanded="false"
         data-target="navbarContent"
+        @click="menuOpen = !menuOpen"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
     </div>
-    <div id="navbarContent" class="navbar-menu">
+    <div id="navbarContent" :class="`navbar-menu ${menuOpen ? 'is-active' : ''}`">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">Home</router-link>
         <router-link class="navbar-item" to="/About">About</router-link>
@@ -73,6 +74,11 @@ export default {
   components:{
     FriendRequestsDropdown
   },
+  data(){
+    return{
+      menuOpen: false
+    }
+  },
   computed: {
     ...mapGetters(["getCurrentUserFullName", "isLoggedIn"])
   },
@@ -85,5 +91,8 @@ export default {
 <style>
 .w-24 {
   width: 50vw;
+}
+.w-100{
+  width: 100%;
 }
 </style>

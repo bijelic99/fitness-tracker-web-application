@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <div class="container sign-up-container">
+    <div class="container">
       <div class="panel">
         <p class="panel-heading">Sign in</p>
         <div class="panel-block">
@@ -99,9 +99,6 @@ export default {
 </script>
 
 <style>
-.sign-up-container {
-  max-width: 40vw;
-}
 .w-100,
 .field {
   width: 100%;
