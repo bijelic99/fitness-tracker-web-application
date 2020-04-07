@@ -8,7 +8,7 @@ const router = express.Router()
 
 const route = '/friend-requests'
 
-// @desc adds the sent friend request to the database
+// @desc adds sent friend request to the database
 // @route POST /friend-requests
 router.post(route, authorization, async (req, res) => {
 

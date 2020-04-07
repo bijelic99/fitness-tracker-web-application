@@ -45,7 +45,7 @@
             </div>
           </div>
           <nav class="level is-mobile">
-            <div class="level-left">
+            <div v-if="isLoggedIn" class="level-left">
               <a class="level-item" aria-label="like" @click="likeButtonClick()">
                 <span class="icon is-small">
                   <i
@@ -55,6 +55,8 @@
                 </span>
               </a>
               <small class="is-small">{{post.likes.length}}</small>
+            </div>
+            <div v-else class="level-left">
             </div>
             <div class="level-right">
               <div class="level-item">

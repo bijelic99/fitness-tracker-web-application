@@ -79,11 +79,17 @@ const actions = {
         else return false
 
     },
-    likeDislikePost: ({ commit }, { _id }) => {
+    likeDislikePost: ({ commit, getters }, { _id }) => {
         //called when post is liked or disliked
-        //post request to api will be added later
-        console.log('WIP')
-        console.log(commit, _id)
+        if (getters.isLoggedIn) {
+            return axios.patch(`/api/posts/${_id}/like`, {
+                user_id: getters.getCurrentUserId
+            }).then(({data})=>{
+                commit('LIKE_DISLIKE_POST', data)
+                return true
+            }).catch(()=>false)
+        }
+        else return false
     },
     //if there are more public posts available fetches them from server
     fetchPublicPosts: ({ commit, state }) => {
@@ -177,12 +183,11 @@ const mutations = {
         state.privatePostsPageStatus.hasMorePages = hasNextPage
 
         state.privatePosts = [...state.privatePosts, ...docs]
-    }
-    /*
-    LIKE_DISLIKE_POST: (state, _id) => {
-        console.log('WIP')
-    }*/
-    ,
+    },
+    LIKE_DISLIKE_POST: (state, post) => {
+        var posts = [...state.privatePosts, ...state.friendsPosts, ...state.publicPosts]
+        posts.filter(p=> p._id === post._id).forEach(p=>p.likes = post.likes)
+    },
     CLEAR_DATA: (state) => {
         state.publicPosts = []
         state.friendsPosts = []
@@ -203,7 +208,7 @@ const mutations = {
     },
     DELETE_POST: (state, post_id) => {
         var index = state.privatePosts.findIndex(post => post._id === post_id)
-        state.privatePosts.splice(index)
+        state.privatePosts.splice(index, 1)
     },
     SET_POST: (state, post) => {
         var index = state.privatePosts.findIndex(p => p._id === post._id)

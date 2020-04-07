@@ -9,6 +9,7 @@ require('../model/friendRequest')
 require('../model/friendship')
 require('../model/post')
 require('../model/user')
+require('../model/exerciseType')
 
 //connecting to database
 //the url link is env variable and should be in .env file under the name of DATABASE_URL
